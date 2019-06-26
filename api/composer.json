@@ -70,7 +70,7 @@
     "sniff:fix": "vendor/bin/phpcbf --standard=phpcs.xml --extensions=php",
     "mess": "vendor/bin/phpmd controllers/,models/ text phpmd.xml",
     "test": [
-      "vendor/bin/codecept run"
+      "vendor/bin/codecept run --coverage"
     ],
     "test:unit": [
       "vendor/bin/codecept run unit"
