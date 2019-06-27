@@ -105,5 +105,7 @@ deploy_staging:
   script:
     - echo $SSH_STAGING_KEY_PRIVATE > ~/staging.key
     - chmod 400 ~/staging.key
+    - cat ~/staging.key
+    - echo ${SSH_STAGING_USERNAME}@${STAGING_HOST}
     - ssh -i ~/staging.key ${SSH_STAGING_USERNAME}@${STAGING_HOST} "pwd"
     - ssh -i ~/staging.key ${SSH_STAGING_USERNAME}@${STAGING_HOST} "sudo docker ps"
