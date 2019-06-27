@@ -100,6 +100,8 @@ deploy_staging:
   stage: deploy
   # only: 
   #   - master
+  before_script:
+    - apk update && apk add openssh
   script:
     - echo $SSH_STAGING_KEY_PRIVATE > ~/staging.key
     - chmod 400 ~/staging.key
