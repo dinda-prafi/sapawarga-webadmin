@@ -106,6 +106,9 @@ deploy_staging:
     - echo "$SSH_STAGING_KEY_PRIVATE" | tr -d '\r' | ssh-add - > /dev/null
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
+    - echo "$STAGING_HOST" > ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+    - ssh-keyscan $STAGING_HOST
   script:
     - ls ~/.ssh
     # - ssh -i ~/staging.key ${SSH_STAGING_USERNAME}@${STAGING_HOST} "pwd"
