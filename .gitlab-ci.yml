@@ -101,8 +101,9 @@ deploy_staging:
   # only: 
   #   - master
   before_script:
-    - 'which ssh-agent || ( apk update && apk add openssh )'
-    - eval $(ssh-agent -s)
+    # - 'which ssh-agent || ( apk update && apk add openssh )'
+    - apk update && apk add openssh
+    # - eval $(ssh-agent -s)
     - echo $SSH_STAGING_KEY_PRIVATE
     - cat $SSH_STAGING_KEY_PRIVATE
     # - echo "$SSH_STAGING_KEY_PRIVATE" | tr -d '\r' | ssh-add - > /dev/null
@@ -113,5 +114,5 @@ deploy_staging:
     - chmod 644 ~/.ssh/known_hosts
     - ssh-keyscan $STAGING_HOST
   script:
-    - ssh -vvv ${SSH_STAGING_USERNAME}@${STAGING_HOST}
+    - ssh -vvv ${SSH_STAGING_USERNAME}@${STAGING_HOST} "pwd"
     - ssh -vvv ${SSH_STAGING_USERNAME}@${STAGING_HOST} "sudo docker ps"
