@@ -105,7 +105,7 @@ deploy_staging:
     - eval $(ssh-agent -s)
     - echo $SSH_STAGING_KEY_PRIVATE
     - cat $SSH_STAGING_KEY_PRIVATE
-    - echo "$SSH_STAGING_KEY_PRIVATE" | tr -d '\r' | ssh-add - > /dev/null
+    # - echo "$SSH_STAGING_KEY_PRIVATE" | tr -d '\r' | ssh-add - > /dev/null
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
     # - echo "$STAGING_HOST" > ~/.ssh/known_hosts
@@ -113,6 +113,5 @@ deploy_staging:
     - chmod 644 ~/.ssh/known_hosts
     - ssh-keyscan $STAGING_HOST
   script:
-    - ls ~/.ssh
-    - ssh -vvv ${SSH_STAGING_USERNAME}@${STAGING_HOST} "pwd"
-    - ssh -vvv ${SSH_STAGING_USERNAME}@${STAGING_HOST} "sudo docker ps"
+    - ssh -i $SSH_STAGING_KEY_PRIVATE -vvv ${SSH_STAGING_USERNAME}@${STAGING_HOST} "pwd"
+    - ssh -i $SSH_STAGING_KEY_PRIVATE -vvv ${SSH_STAGING_USERNAME}@${STAGING_HOST} "sudo docker ps"
