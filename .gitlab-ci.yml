@@ -114,5 +114,5 @@ deploy_staging:
     - chmod 644 ~/.ssh/known_hosts
     - ssh-keyscan $STAGING_HOST
   script:
-    - ssh -vvv ${SSH_STAGING_USERNAME}@${STAGING_HOST} "pwd"
-    - ssh -vvv ${SSH_STAGING_USERNAME}@${STAGING_HOST} "sudo docker ps"
+    - ssh -i $SSH_STAGING_KEY_PRIVATE -vvv ${SSH_STAGING_USERNAME}@${STAGING_HOST} "pwd"
+    - ssh -i $SSH_STAGING_KEY_PRIVATE -vvv ${SSH_STAGING_USERNAME}@${STAGING_HOST} "sudo docker ps"
