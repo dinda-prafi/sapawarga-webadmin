@@ -112,5 +112,5 @@ deploy_staging:
     - ssh-keyscan $STAGING_HOST
   script:
     - ls ~/.ssh
-    - ssh -A ${SSH_STAGING_USERNAME}@${STAGING_HOST} "pwd"
-    - ssh -A ${SSH_STAGING_USERNAME}@${STAGING_HOST} "sudo docker ps"
+    - ssh ${SSH_STAGING_USERNAME}@${STAGING_HOST} "pwd"
+    - ssh ${SSH_STAGING_USERNAME}@${STAGING_HOST} "sudo docker ps"
