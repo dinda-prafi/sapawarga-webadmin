@@ -105,13 +105,13 @@ deploy_staging:
     - mkdir -p ~/.ssh
     # - apk update && apk add openssh
     - eval $(ssh-agent -s)
-    - echo $SSH_STAGING_KEY_PRIVATE
-    - cat $SSH_STAGING_KEY_PRIVATE
-    - chmod 400 $SSH_STAGING_KEY_PRIVATE
+    # - echo $SSH_STAGING_KEY_PRIVATE
+    - cat private.key
+    - chmod 400 private.key
     # - echo "$SSH_STAGING_KEY_PRIVATE" | tr -d '\r' | ssh-add - > /dev/null
     # - chmod 700 ~/.ssh
     # - echo "$STAGING_HOST" > ~/.ssh/known_hosts
-    - ssh-add $SSH_STAGING_KEY_PRIVATE
+    - ssh-add private.key
     # - ssh-keyscan -t rsa $STAGING_HOST >> ~/.ssh/known_hosts
     # - chmod 644 ~/.ssh/known_hosts
     # - ssh-keyscan $STAGING_HOST
