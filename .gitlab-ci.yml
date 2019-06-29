@@ -116,5 +116,5 @@ deploy_staging:
     # - chmod 644 ~/.ssh/known_hosts
     # - ssh-keyscan $STAGING_HOST
   script:
-    - ssh gitlab-ci@35.247.135.93 "pwd"
+    - ssh -o StrictHostKeyChecking=no gitlab-ci@35.247.135.93 "pwd"
     # - ssh -o StrictHostKeyChecking=no -vvv ${SSH_STAGING_USERNAME}@${STAGING_HOST} "sudo docker ps"
