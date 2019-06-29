@@ -101,18 +101,19 @@ deploy_staging:
   # only: 
   #   - master
   before_script:
-    # - 'which ssh-agent || ( apk update && apk add openssh )'
-    - apk update && apk add openssh
-    # - eval $(ssh-agent -s)
+    - 'which ssh-agent || ( apk update && apk add openssh-client )'
+    - mkdir -p ~/.ssh
+    # - apk update && apk add openssh
+    - eval $(ssh-agent -s)
     - echo $SSH_STAGING_KEY_PRIVATE
     - cat $SSH_STAGING_KEY_PRIVATE
     # - echo "$SSH_STAGING_KEY_PRIVATE" | tr -d '\r' | ssh-add - > /dev/null
-    - mkdir -p ~/.ssh
-    - chmod 700 ~/.ssh
+    # - chmod 700 ~/.ssh
     # - echo "$STAGING_HOST" > ~/.ssh/known_hosts
-    - ssh-keyscan -t rsa $STAGING_HOST >> ~/.ssh/known_hosts
-    - chmod 644 ~/.ssh/known_hosts
-    - ssh-keyscan $STAGING_HOST
+    - ssh-add $SSH_STAGING_KEY_PRIVATE
+    # - ssh-keyscan -t rsa $STAGING_HOST >> ~/.ssh/known_hosts
+    # - chmod 644 ~/.ssh/known_hosts
+    # - ssh-keyscan $STAGING_HOST
   script:
-    - ssh -i $SSH_STAGING_KEY_PRIVATE -vvv ${SSH_STAGING_USERNAME}@${STAGING_HOST} "pwd"
-    - ssh -i $SSH_STAGING_KEY_PRIVATE -vvv ${SSH_STAGING_USERNAME}@${STAGING_HOST} "sudo docker ps"
+    - ssh -o StrictHostKeyChecking=no -vvv ${SSH_STAGING_USERNAME}@${STAGING_HOST} "pwd"
+    # - ssh -o StrictHostKeyChecking=no -vvv ${SSH_STAGING_USERNAME}@${STAGING_HOST} "sudo docker ps"
