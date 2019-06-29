@@ -107,6 +107,7 @@ deploy_staging:
     - eval $(ssh-agent -s)
     - echo $SSH_STAGING_KEY_PRIVATE
     - cat $SSH_STAGING_KEY_PRIVATE
+    - chmod 400 $SSH_STAGING_KEY_PRIVATE
     # - echo "$SSH_STAGING_KEY_PRIVATE" | tr -d '\r' | ssh-add - > /dev/null
     # - chmod 700 ~/.ssh
     # - echo "$STAGING_HOST" > ~/.ssh/known_hosts
