@@ -101,9 +101,9 @@ deploy_staging:
   # only: 
   #   - master
   variables:
-    SSH_STAGING_KEY_PRIVATE=private.key
-    SSH_STAGING_USERNAME=gitlab-ci
-    STAGING_HOST=35.247.135.93
+    - SSH_STAGING_KEY_PRIVATE: private.key
+    - SSH_STAGING_USERNAME: gitlab-ci
+    - STAGING_HOST: 35.247.135.93
   before_script:
     - echo $SSH_STAGING_KEY_PRIVATE
     - echo $SSH_STAGING_USERNAME
