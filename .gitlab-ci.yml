@@ -103,18 +103,8 @@ deploy_staging:
   before_script:
     - 'which ssh-agent || ( apk update && apk add openssh-client )'
     - mkdir -p ~/.ssh
-    # - apk update && apk add openssh
     - eval $(ssh-agent -s)
-    # - echo $SSH_STAGING_KEY_PRIVATE
-    - cat private.key
-    - chmod 400 private.key
-    # - echo "$SSH_STAGING_KEY_PRIVATE" | tr -d '\r' | ssh-add - > /dev/null
-    # - chmod 700 ~/.ssh
-    # - echo "$STAGING_HOST" > ~/.ssh/known_hosts
-    - ssh-add private.key
-    # - ssh-keyscan -t rsa $STAGING_HOST >> ~/.ssh/known_hosts
-    # - chmod 644 ~/.ssh/known_hosts
-    # - ssh-keyscan $STAGING_HOST
+    - chmod 400 $SSH_STAGING_KEY_PRIVATE
+    - ssh-add $SSH_STAGING_KEY_PRIVATE
   script:
-    - ssh -o StrictHostKeyChecking=no gitlab-ci@35.247.135.93 "pwd"
-    # - ssh -o StrictHostKeyChecking=no -vvv ${SSH_STAGING_USERNAME}@${STAGING_HOST} "sudo docker ps"
+    - ssh -o StrictHostKeyChecking=no ${SSH_STAGING_USERNAME}@${STAGING_HOST} "pwd"
