@@ -3,12 +3,18 @@ services:
   app:
     build:
       context: ./backend
-      dockerfile: Dockerfile
     image: registry.gitlab.com/jdsteam/sapa-warga/sapawarga-webadmin:${IMAGETAG}
     networks:
       - internal
     ports: 
-      - 8080:80
+      - 8080:8080
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+      - /app/build
+      - ./.env-vuejs-template:/app/.env.development
+    environment:
+      - NODE_ENV=development
 
 networks:
   internal:
