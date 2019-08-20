@@ -116,4 +116,3 @@ deploy_production:
     - kubectl apply -f kubernetes/webadmin-variables.yaml
         -f kubernetes/webadmin-deployment.yaml
         -f kubernetes/webadmin-service.yaml
-        -f kubernetes/ingress.yaml
