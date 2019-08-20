@@ -97,21 +97,17 @@ deploy_production:
   stage: deploy
   image: dtzar/helm-kubectl
   script:
-    # - kubectl config set-cluster k8s --server="${SERVER}"
-    # - kubectl config set clusters.k8s.certificate-authority-data ${CERTIFICATE_AUTHORITY_DATA}
-    # - kubectl config set-credentials gitlab --token="${USER_TOKEN}"
-    # - kubectl config set-context default --cluster=k8s --user=gitlab
-    # - kubectl config use-context default
-    - kubectl config set-cluster k8s --server="https://35.240.144.36"
-    - kubectl config set clusters.k8s.certificate-authority-data LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURDekNDQWZPZ0F3SUJBZ0lRUDFoWldaK0xRT25vZTZ4UUxRSUc3akFOQmdrcWhraUc5dzBCQVFzRkFEQXYKTVMwd0t3WURWUVFERXlRM01qazVPVEkxWmkxall6QXhMVFJoTkRNdE9ESTRNQzFpWlRGbVpXVTBaR0pqTm1ZdwpIaGNOTVRrd09ERXlNRE0wTXpNNFdoY05NalF3T0RFd01EUTBNek00V2pBdk1TMHdLd1lEVlFRREV5UTNNams1Ck9USTFaaTFqWXpBeExUUmhORE10T0RJNE1DMWlaVEZtWldVMFpHSmpObVl3Z2dFaU1BMEdDU3FHU0liM0RRRUIKQVFVQUE0SUJEd0F3Z2dFS0FvSUJBUURJK0FGRWdlYklwNG1PbDVDaHh0NGpuRVk5ZkRJYXBFN2xaMEV6RmQvUQpTWk9QMXNiQUY0ZUkycGc1eS9md0VHL2NFMlpLVDFxdUg0YWpHbjAzOHFQZ21ia0Jnek1jTTZ6R3l6N3g5dGxaCjJZd2VXaWVrVmh3N3N4cVZQNWtuOFNOWkRKQUpoWjBtamVwVE44cnRGK1NKZWpEZGRoNitTNWJjYlhzRTdwUEYKamJVdEZyVjh0Q2hGSHpRTEdhbmJ1WURDeTNzMGZqcE9RU21PQWpQY1Z3Y3VnQWFlWFJKSmJNbklOYVZFa0YxNwp0aHpYN1hUSHFiYXp0OGdCY2hDSlZpekxvM0drb01GRjFFN2ViT3ZaQ0NkYzJiZ0ZmSCtCOXhTZ29tL1dzeTVFCkRRL1gwNkl1KzllWEpFaERXS0lPTTZxMTB6a1ZQNTh5NCtvSWRRbys1akJIQWdNQkFBR2pJekFoTUE0R0ExVWQKRHdFQi93UUVBd0lDQkRBUEJnTlZIUk1CQWY4RUJUQURBUUgvTUEwR0NTcUdTSWIzRFFFQkN3VUFBNElCQVFDWQpKMDlxNWRrWTlWNzlzTmNUKzd5OFZqd3llWEFhZGMwbXE1T3E4YXAvSUtnekJZZ3NpTWFlRWVWRHZScDV3cUs5CmUrSGtVaGNKUFFud0FDeUFtY3RzSDJwMjdLMVp6L3FzUHpxNHhOWVhCYng5dlN1M2dSZWc0NFJISDc4L2dSdjcKV2JITFJ2a1FVNXB2TDFhQTNLZzhTb3dINnpRSjRqRVA5Z0NFM21VZERpSTAycXZaRFdjd0VBZFUvdEFISFZjcQpzNzloQlUyUks5Vlo1b3F2NlBaSWk5VG5tMXRFZ0FwT0RKVFpOZW5qVDhNOFRhd1NZQ1NjcnhZVXc1R1RDRnlnCmN1c3NLa1FJcml3UHFiYjQzUXd5THRlcWJkNnlYdUhKNUtReHQxcXEvcGpvaU5ZSktkZ0xNb2grdTJlUklTaCsKL0x6cEt2a1RJaVRXY2l3YW5ROFcKLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQ==
-    - kubectl config set-credentials gitlab --token="eyJhbGciOiJSUzI1NiIsImtpZCI6IiJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJrdWJlLXN5c3RlbSIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VjcmV0Lm5hbWUiOiJnaXRsYWItYWRtaW4tdG9rZW4tem5rYjgiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC5uYW1lIjoiZ2l0bGFiLWFkbWluIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQudWlkIjoiYTI3OWMxYzUtYzI2NS0xMWU5LTkxZGMtNDIwMTBhOTQwMTZhIiwic3ViIjoic3lzdGVtOnNlcnZpY2VhY2NvdW50Omt1YmUtc3lzdGVtOmdpdGxhYi1hZG1pbiJ9.DVLNKOGGmIbboyNHbzlG39MaBS9gbOsnVWcdY_rWt73v_CtIdZLflbCZJRgT1Ws2RwY3YaH1BdjW8QIQmSwdNrbeh-cd_p8Il9nLAthLZ8bCy10mH9V9q7nK2xUiF24KzsS8Dky9XcQU7fntgGoV6WmFm4iHQzdWrhvU32c8mtpWRdbbA68eqU6UTczNMOFindv-j989s2uZFC_hXGvgEI40k6CjsxltPRVkZSV37k0xJf2CrggcEUhw2B_iorGfh--lvrPTmhuvdvabzboCXbSwCHtvqHRvGIf4w3uGwAxDe7xgtnCbEy7eyzowycu_IJ605Jhp0wlOGuRp4ysJJA"
+    - kubectl config set-cluster k8s --server="${KUBERNETES_SERVER}"
+    - kubectl config set clusters.k8s.certificate-authority-data ${KUBERNETES_CERTIFICATE_AUTHORITY_DATA}
+    - kubectl config set-credentials gitlab --token="${KUBERNETES_USER_TOKEN}"
     - kubectl config set-context default --cluster=k8s --user=gitlab
+    - kubectl config use-context default
     - kubectl config use-context default
     - kubectl cluster-info
     - cp kubernetes/webadmin-variables-sample.yaml kubernetes/webadmin-variables.yaml
     - cat kubernetes/webadmin-variables.yaml
-    - sed -i "s/%VUE_APP_BASE_API%/sapawarga.jabarprov.go.id\/api\/v1\//g" kubernetes/webadmin-variables.yaml
-    - sed -i "s/%dockerconfigjson%/ewogICAgImF1dGhzIjogewogICAgICAgICJyZWdpc3RyeS5naXRsYWIuY29tIjogewogICAgICAgICAgICAiYXV0aCI6ICJZWE5oZEhKNVlUcGlhWE50YVd4c1lXaHAiCiAgICAgICAgfQogICAgfQp9/g" kubernetes/webadmin-variables.yaml
+    - sed -i "s/%VUE_APP_BASE_API%/${VUE_APP_BASE_API}/g" kubernetes/webadmin-variables.yaml
+    - sed -i "s/%dockerconfigjson%/${dockerconfigjson}/g" kubernetes/webadmin-variables.yaml
     - cat kubernetes/webadmin-variables.yaml
     - kubectl apply -f kubernetes/webadmin-variables.yaml
         -f kubernetes/webadmin-deployment.yaml
