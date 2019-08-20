@@ -21,6 +21,8 @@ stages:
 code_quality:
   image: docker:stable
   stage: code_quality
+  only:
+    - master
   services:
     - docker:stable-dind
   variables:
@@ -41,6 +43,8 @@ code_quality:
 
 build_dev:
   stage: build
+  only:
+    - master
   script:
     - docker-compose -f docker-compose.dev.yml build
     - docker images
@@ -48,6 +52,8 @@ build_dev:
 
 test_webadmin:
   stage: test
+  only:
+    - master
   script:
     - docker-compose -f docker-compose.dev.yml pull
     - docker images
