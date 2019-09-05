@@ -31,8 +31,6 @@ module.exports = {
       errors: true
     },
     proxy: {
-      // change xxx-api/login => mock/login
-      // detail: https://cli.vuejs.org/config/#devserver-proxy
       [process.env.VUE_APP_BASE_API]: {
         target: `http://localhost:${port}/`,
         changeOrigin: true,
@@ -53,11 +51,6 @@ module.exports = {
           extended: true
         })
       );
-
-      const { default: mocks } = require('./mock');
-      for (const mock of mocks) {
-        app[mock.type](mock.url, mock.response);
-      }
     }
   },
   configureWebpack: {
