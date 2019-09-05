@@ -51,26 +51,28 @@ export default {
         }
         this.map = new google.maps.Map(element, options)
 
-        dataMap.forEach((coord) => {
-          const position = new google.maps.LatLng(coord.longitude, coord.latitude)
-          const marker = new google.maps.Marker({
-            position: position,
-            map: this.map
-          })
+        if (dataMap) {
+          dataMap.forEach((coord) => {
+            const position = new google.maps.LatLng(coord.longitude, coord.latitude)
+            const marker = new google.maps.Marker({
+              position: position,
+              map: this.map
+            })
 
-          const infoWindow = new google.maps.InfoWindow({
-            content: `<div>${coord.name}</div><br>
-                    <div style="text-align: center">${coord.counts} Usulan</div>`
-          })
+            const infoWindow = new google.maps.InfoWindow({
+              content: `<div>${coord.name}</div><br>
+                      <div style="text-align: center">${coord.counts} Usulan</div>`
+            })
 
-          marker.addListener('click', () => {
-            if (this.activeInfoWindow) {
-              this.activeInfoWindow.close()
-            }
-            infoWindow.open(this.map, marker)
-            this.activeInfoWindow = infoWindow
+            marker.addListener('click', () => {
+              if (this.activeInfoWindow) {
+                this.activeInfoWindow.close()
+              }
+              infoWindow.open(this.map, marker)
+              this.activeInfoWindow = infoWindow
+            })
           })
-        })
+        }
       } catch (error) {
         console.error(error)
         this.$message.error(this.$t('dashboard-map-error'))

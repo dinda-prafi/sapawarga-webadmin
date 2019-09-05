@@ -139,8 +139,8 @@ export default {
     'error-edit-role': 'Anda tidak memiliki hak akses halaman ini.'
   },
   common: {
-    confirm: 'Ya',
-    cancel: 'Batal'
+    'confirm': 'Ya',
+    'cancel': 'Batal'
   },
   errors: {
     'internal-server-error': 'Telah terjadi kesalahan sistem, silahkan muat ulang halaman ini.',
@@ -156,7 +156,7 @@ export default {
 
   },
   navbar: {
-    profile: 'Lihat Profil',
+    'profile': 'Lihat Profil',
     'profile-edit': 'Edit Profil'
   }
 }
