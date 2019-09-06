@@ -4,8 +4,6 @@ services:
     build:
       context: ./backend
     image: registry.gitlab.com/jdsteam/sapa-warga/sapawarga-webadmin:${VERSION}
-    networks:
-      - internal
     ports: 
       - 8081:80
     # volumes:
@@ -13,7 +11,16 @@ services:
       # - ./backend/tests:/app/tests
     env_file:
       - .env
-      
+
+    networks:
+      dev-jds-network:
+         ipv4_address: 10.166.0.2
+
 networks:
-  internal:
-    driver: bridge
+  dev-jds-network:
+      ipam:
+          driver: default
+          config:
+             - subnet: 10.166.0.0/24
+      
+
