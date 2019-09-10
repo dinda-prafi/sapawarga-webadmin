@@ -135,8 +135,8 @@ deploy_staging_aws:
   stage: deploy
   only:
     - master
-  dependencies: 
-    - versioning
+  # dependencies: 
+  #   - versioning
   before_script:
     - export VERSION=v0.1-76-g854eab1
     - 'which ssh-agent || ( apk update && apk add openssh-client )'
