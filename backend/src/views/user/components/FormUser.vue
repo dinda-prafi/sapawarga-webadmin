@@ -45,7 +45,7 @@
           <el-row>
             <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12">
               <el-form-item label="Peran" prop="role">
-                <el-select v-model="user.role" placeholder="Pilih Peran" :disabled="isProfile">
+                <el-select v-model="user.role" placeholder="Pilih Peran" :disabled="isProfile || isEdit">
                   <el-option
                     v-for="item in filterRole"
                     :key="item.value"
@@ -65,7 +65,7 @@
                   v-if="area !== null"
                   v-model="user.kabkota"
                   placeholder="Pilih Kab/Kota"
-                  :disabled="user.role === ''"
+                  :disabled="user.role === '' || isEdit"
                   @change="getKecamatan"
                 >
                   <el-option
@@ -88,7 +88,7 @@
                 <el-select
                   v-model="user.kecamatan"
                   placeholder="Pilih Kecamatan"
-                  :disabled="(user.kabkota == '' && checkPermission(['admin', 'staffProv']) || user.role === '')"
+                  :disabled="(user.kabkota == '' && checkPermission(['admin', 'staffProv']) || user.role === '' || isEdit)"
                   @change="getKelurahan"
                 >
                   <el-option
@@ -106,7 +106,11 @@
                 label="Desa/Kelurahan"
                 prop="kelurahan"
               >
-                <el-select v-model="user.kelurahan" placeholder="Pilih Desa/Kelurahan" :disabled="(user.kecamatan == '' && checkPermission(['admin', 'staffProv', 'staffKabkota']) || user.role === '')">
+                <el-select
+                  v-model="user.kelurahan"
+                  placeholder="Pilih Desa/Kelurahan"
+                  :disabled="(user.kecamatan == '' && checkPermission(['admin', 'staffProv', 'staffKabkota']) || user.role === '' || isEdit)"
+                >
                   <el-option
                     v-for="item in kelurahan"
                     :key="item.id"
@@ -348,7 +352,7 @@ export default {
           },
           {
             max: 255,
-            message: 'Username maksimal 14 karakter',
+            message: 'Username maksimal 255 karakter',
             trigger: 'blur'
           },
           {
@@ -661,7 +665,7 @@ export default {
     },
     filterRole() {
       const ruleOptions = this.opsiPeran
-      if ((!this.isEdit && !this.isProfile)) {
+      if ((this.isEdit && !this.isProfile) || (!this.isEdit && !this.isProfile)) {
         if (checkPermission(['admin'])) {
           return ruleOptions.slice(1, ruleOptions.length)
         } if (checkPermission(['staffProv'])) {
@@ -671,20 +675,6 @@ export default {
         } if (checkPermission(['staffKec'])) {
           return ruleOptions.slice(5, ruleOptions.length)
         } if (checkPermission(['staffKel'])) {
-          return ruleOptions.slice(6, ruleOptions.length)
-        }
-      } else if (this.isEdit && !this.isProfile) {
-        if (this.user.role === 'admin') {
-          return ruleOptions
-        } else if (this.user.role === 'staffProv') {
-          return ruleOptions.slice(2, ruleOptions.length)
-        } else if (this.user.role === 'staffKabkota') {
-          return ruleOptions.slice(3, ruleOptions.length)
-        } else if (this.user.role === 'staffKec') {
-          return ruleOptions.slice(4, ruleOptions.length)
-        } else if (this.user.role === 'staffKel') {
-          return ruleOptions.slice(5, ruleOptions.length)
-        } else if (this.user.role === 'staffRW') {
           return ruleOptions.slice(6, ruleOptions.length)
         }
       }
@@ -952,11 +942,13 @@ export default {
         if (valid) {
           this.loading = true
           const userEdit = {
+            username: this.user.username,
             name: this.user.name,
             email: this.user.email,
             phone: this.user.phone,
-            address: this.user.address,
+            rw: this.user.rw,
             rt: this.user.rt,
+            address: this.user.address,
             facebook: this.user.facebook,
             twitter: this.user.twitter,
             instagram: this.user.instagram,
