@@ -133,8 +133,8 @@ stages:
 deploy_staging_aws:
   image: docker:stable
   stage: deploy
-  only:
-    - master
+  # only:
+  #   - master
   # dependencies: 
   #   - versioning
   before_script:
