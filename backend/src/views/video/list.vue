@@ -22,12 +22,21 @@
       <el-col class="col-right" :xs="24" :sm="24" :md="24" :lg="17" :xl="17">
 
         <el-row style="margin: 10px 0px">
-          <el-col :span="12">
+          <el-col :span="6">
             <router-link :to="{ path: '/video/create' }">
               <el-button type="primary" size="small" icon="el-icon-plus">
                 Tambah Video Baru
               </el-button>
             </router-link>
+          </el-col>
+          <el-col :span="6">
+            <div v-permission="['admin','staffProv', 'staffKabkota']">
+              <router-link :to="{ path: '/video/priority' }">
+                <el-button type="primary" size="small" icon="el-icon-plus">
+                  Prioritas Video
+                </el-button>
+              </router-link>
+            </div>
           </el-col>
         </el-row>
 
@@ -107,11 +116,13 @@
 <script>
 import Pagination from '@/components/Pagination'
 import { fetchList, fetchStatistic, deleteData, deactivate, activate } from '@/api/video'
+import permission from '@/directive/permission/index.js'
 import ListFilter from './_listfilter'
 import { mapGetters } from 'vuex'
 
 export default {
   components: { Pagination, ListFilter },
+  directives: { permission },
   filters: {
     statusFilter(status) {
       const statusMap = {

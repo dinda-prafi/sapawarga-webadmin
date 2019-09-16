@@ -8,6 +8,22 @@ export function fetchList(query) {
   })
 }
 
+export function fetchListPriority(query) {
+  return request({
+    url: '/videos/featured',
+    method: 'get',
+    params: query
+  })
+}
+
+export function priorityVideoUpdate(data) {
+  return request({
+    url: '/videos/featured',
+    method: 'post',
+    data
+  })
+}
+
 export function fetchStatistic() {
   return request({
     url: '/videos/statistics',

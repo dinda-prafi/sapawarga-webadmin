@@ -26,17 +26,6 @@
             <el-select v-model="video.source" name="source" placeholder="Pilih Sumber" disabled />
           </el-form-item>
 
-          <el-form-item label="Set Prioritas" prop="seq">
-            <el-select v-model="video.seq" filterable placeholder="Pilih Prioritas">
-              <el-option
-                v-for="item in priorityOptions"
-                :key="item.id"
-                :value="item.value"
-                :label="item.label"
-              />
-            </el-select>
-          </el-form-item>
-
           <el-form-item label="URL Video" prop="video_url">
             <el-input v-model="video.video_url" type="text" name="video_url" placeholder="https://www.youtube.com/watch?v=ejThfEGcN3I" />
           </el-form-item>

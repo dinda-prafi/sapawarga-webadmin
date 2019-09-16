@@ -48,6 +48,16 @@ const videoRouter = {
         title: 'video-detail',
         roles: ['admin', 'staffProv', 'staffKabkota']
       }
+    },
+    {
+      name: 'video-priority',
+      path: 'priority',
+      component: () => import('@/views/video/listPriority'),
+      hidden: true,
+      meta: {
+        title: 'video-priority',
+        roles: ['admin', 'staffProv', 'staffKabkota']
+      }
     }
   ]
 }
