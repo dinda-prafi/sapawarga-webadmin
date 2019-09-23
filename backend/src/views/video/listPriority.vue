@@ -29,22 +29,33 @@
       </el-col>
     </el-row>
     <el-dialog v-el-drag-dialog :visible.sync="dialogTableVisible" title="List Video">
-      <ListFilter
-        :list-query.sync="listQuery"
-        @submit-search="getListVideo"
-        @reset-search="resetFilter"
-      />
-      <el-table :data="listVideo">
-        <el-table-column property="title" label="Judul Video" />
-        <el-table-column property="channel.name" label="Sumber" />
-        <el-table-column align="center" label="Actions">
-          <template slot-scope="scope">
-            <el-button type="white" size="mini" @click="addVideoPriority(scope.row), dialogTableVisible = false">
-              Tambah
-            </el-button>
-          </template>
-        </el-table-column>
-      </el-table>
+      <el-row>
+        <ListFilter
+          :list-query.sync="listQuery"
+          @submit-search="getListVideo"
+          @reset-search="resetFilter"
+        />
+        <el-table :data="listVideo">
+          <el-table-column type="index" width="50" align="center" :index="getTableRowNumbering" />
+          <el-table-column property="title" label="Judul Video" />
+          <el-table-column property="source" label="Sumber" />
+          <el-table-column property="kabkota.name" label="Target" />
+          <el-table-column align="center" label="Actions">
+            <template slot-scope="scope">
+              <el-button type="white" size="mini" @click="addVideoPriority(scope.row), dialogTableVisible = false">
+                Tambah
+              </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <pagination
+          v-show="total>0"
+          :total="total"
+          :page.sync="listQuery.page"
+          :limit.sync="listQuery.limit"
+          @pagination="listVideo"
+        />
+      </el-row>
     </el-dialog>
   </div>
 </template>
@@ -52,6 +63,7 @@
 <script>
 import elDragDialog from '@/directive/el-dragDialog' // base on element-ui
 import DndList from '@/components/DndList'
+import Pagination from '@/components/Pagination'
 import { fetchList, fetchListPriority, priorityVideoUpdate } from '@/api/video'
 import ListFilter from './_listfilter'
 
@@ -59,7 +71,8 @@ export default {
   directives: { elDragDialog },
   components: {
     ListFilter,
-    DndList
+    DndList,
+    Pagination
   },
 
   data() {
@@ -114,12 +127,17 @@ export default {
       this.listLoading = true
       fetchList(this.listQuery).then(response => {
         this.listVideo = response.data.items
+        this.total = response.data._meta.totalCount
       })
     },
 
     resetFilter() {
       Object.assign(this.$data.listQuery, this.$options.data().listQuery)
       this.getListVideo()
+    },
+
+    getTableRowNumbering(index) {
+      return ((this.listQuery.page - 1) * this.listQuery.limit) + (index + 1)
     },
 
     addVideoPriority(data) {

@@ -21,23 +21,19 @@
 
       <el-col class="col-right" :xs="24" :sm="24" :md="24" :lg="17" :xl="17">
 
-        <el-row style="margin: 10px 0px">
-          <el-col :span="6">
-            <router-link :to="{ path: '/video/create' }">
+        <el-row style="margin: 10px 0px" type="flex">
+          <router-link :to="{ path: '/video/create' }">
+            <el-button type="primary" size="small" icon="el-icon-plus" style="margin: 0 10px 0 0">
+              Tambah Video Baru
+            </el-button>
+          </router-link>
+          <div v-permission="['admin','staffProv', 'staffKabkota']">
+            <router-link :to="{ path: '/video/priority' }">
               <el-button type="primary" size="small" icon="el-icon-plus">
-                Tambah Video Baru
+                Prioritas Video
               </el-button>
             </router-link>
-          </el-col>
-          <el-col :span="6">
-            <div v-permission="['admin','staffProv', 'staffKabkota']">
-              <router-link :to="{ path: '/video/priority' }">
-                <el-button type="primary" size="small" icon="el-icon-plus">
-                  Prioritas Video
-                </el-button>
-              </router-link>
-            </div>
-          </el-col>
+          </div>
         </el-row>
 
         <ListFilter :list-query.sync="listQuery" @submit-search="getList" @reset-search="resetFilter" />
