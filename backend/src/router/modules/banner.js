@@ -7,7 +7,7 @@ const bannerRouter = {
   redirect: '/banner/index',
   meta: {
     title: 'banner-manage',
-    roles: ['admin', 'staffProv', 'staffKabkota', 'staffKec', 'staffKel'],
+    roles: ['admin', 'staffProv'],
     icon: 'table'
   },
   children: [
@@ -17,7 +17,7 @@ const bannerRouter = {
       component: () => import('@/views/banner/list'),
       meta: {
         title: 'banner-list',
-        roles: ['admin', 'staffProv', 'staffKabkota', 'staffKec', 'staffKel']
+        roles: ['admin', 'staffProv']
       }
     },
     {
@@ -26,7 +26,7 @@ const bannerRouter = {
       component: () => import('@/views/banner/create'),
       meta: {
         title: 'banner-create',
-        roles: ['admin', 'staffProv', 'staffKabkota', 'staffKec', 'staffKel']
+        roles: ['admin', 'staffProv']
       }
     },
     {
@@ -37,7 +37,7 @@ const bannerRouter = {
       meta: {
         title: 'banner-edit',
         noCache: true,
-        roles: ['admin', 'staffProv', 'staffKabkota', 'staffKec', 'staffKel']
+        roles: ['admin', 'staffProv']
       }
     },
     {
@@ -47,7 +47,7 @@ const bannerRouter = {
       hidden: true,
       meta: {
         title: 'banner-detail',
-        roles: ['admin', 'staffProv', 'staffKabkota', 'staffKec', 'staffKel']
+        roles: ['admin', 'staffProv']
       }
     }
   ]
