@@ -152,7 +152,7 @@ export default {
       fetchRecord(id).then(response => {
         this.news = response.data
         if (this.news.status === 10) {
-          this.$message.error(this.$t('crud.polling-error-edit-published'))
+          this.$message.error(this.$t('crud.error-edit-role'))
           this.$router.push('/news-hoax/index')
         }
       }).catch(err => {
