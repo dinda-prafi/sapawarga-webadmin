@@ -44,7 +44,7 @@
                 <el-button type="info" icon="el-icon-view" size="small" />
               </router-link>
               <el-button type="danger" icon="el-icon-delete" size="small" :disabled="scope.row.status === 10" @click="deleteNews(scope.row.id)" />
-              <router-link :to="'/news-hoax/edit/' +scope.row.id">
+              <router-link :to="(scope.row.status !== 10 ? '/news-hoax/edit/' +scope.row.id : '')">
                 <el-button type="info" icon="el-icon-edit" size="small" :disabled="scope.row.status === 10" />
               </router-link>
               <el-tooltip content="Nonaktifkan Berita Counter Hoax" placement="top">
