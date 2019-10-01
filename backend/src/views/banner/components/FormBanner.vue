@@ -16,7 +16,7 @@
             </el-radio-group>
           </el-form-item>
           <el-form-item v-if="banner.type === 'eksternal'" label="Tautan" prop="type">
-            <el-input v-model="banner.internal_category" type="text" name="title" placeholder="Judul Banner" />
+            <el-input v-model="banner.internal_category" type="text" name="title" placeholder="URL Banner" />
           </el-form-item>
           <el-form-item v-else label="Kategori" prop="category">
              <el-select v-model="banner.internal_entity_id" placeholder="Pilih Kategori">
@@ -24,7 +24,13 @@
                 <el-option label="Polling" value="polling"></el-option>
                 <el-option label="Berita" value="berita"></el-option>
              </el-select>
+            <span v-if="banner.internal_entity_id !== null">
+              <el-button>Pilihan</el-button>
+            </span>
           </el-form-item>
+          <!-- <el-form-item v-if="banner.internal_entity_id !== null">
+            <el-button>Pilihan</el-button>
+          </el-form-item> -->
           <el-form-item>
             <el-button v-if="isEdit" type="primary" :loading="loading" @click="submitForm">{{ $t('crud.save-update') }}</el-button>
             <el-button v-else type="primary" :loading="loading" @click="submitForm">{{ $t('crud.save-banner') }}</el-button>
