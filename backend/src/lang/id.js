@@ -109,6 +109,7 @@ export default {
     'save-news': 'Tambah Berita',
     'save-video': 'Tambah Video',
     'save-user': 'Tambah Pengguna',
+    'save-banner': 'Tambah Banner',
 
     'back-to-list': 'Kembali ke Daftar',
     'send-polling': 'Publikasikan Polling',
