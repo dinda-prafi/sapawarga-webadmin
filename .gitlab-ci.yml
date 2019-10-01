@@ -16,9 +16,11 @@ versioning:
   before_script:
     - apk add git
   script:
-    - export VERSION=$(git describe --first-parent --tags)
-    - echo $VERSION
-    - echo $VERSION > version
+    #- export VERSION=$(git describe --first-parent --tags)
+    - git describe --first-parent --tags > version
+    #- echo $VERSION
+    #- echo $VERSION > version
+    - cat version
   artifacts:
     paths:
       - version
