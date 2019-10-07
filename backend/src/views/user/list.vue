@@ -30,7 +30,7 @@
             </template>
           </el-table-column>
 
-          <el-table-column v-if="checkPermission(['admin', 'staffProv'])" prop="last_access_at" :formatter="formatterCell" label="Akses Terakhir" min-width="120" />
+          <el-table-column v-if="checkPermission(['admin', 'staffProv'])" prop="last_access_at" :formatter="formatterCell" sortable="custom" label="Akses Terakhir" min-width="120" />
 
           <el-table-column prop="phone" min-width="120" sortable="custom" label="Telp" />
           <el-table-column prop="role_label" min-width="150" label="Role" />
@@ -116,6 +116,8 @@ export default {
         kel_id: null,
         role_id: this.roleId,
         profile_completed: null,
+        last_access_start: null,
+        last_access_end: null,
         sort_by: 'name',
         sort_order: 'ascending',
         page: 1,
