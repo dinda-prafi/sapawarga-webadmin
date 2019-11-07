@@ -7,11 +7,11 @@
       <el-col :xs="24" :sm="16" :lg="19">
 
         <el-form ref="news" :model="news" :rules="rules" :status-icon="true" label-width="160px">
-          <el-form-item label="Judul Berita" prop="title">
+          <el-form-item :label="$t('label.category')" prop="title">
             <el-input v-model="news.title" name="title" type="text" placeholder="Judul Berita" />
           </el-form-item>
 
-          <el-form-item label="Kategori" prop="category_id">
+          <el-form-item :label="$t('label.news-title')" prop="category_id">
             <el-select v-model="news.category_id" name="category" placeholder="Pilih Kategori">
               <el-option
                 v-for="item in optionsCategory"
@@ -22,18 +22,18 @@
             </el-select>
           </el-form-item>
 
-          <el-form-item label="Jenis" prop="jenis_id">
-            <el-select v-model="news.category_id" name="jenis" placeholder="Pilih Jenis">
+          <el-form-item :label="$t('label.type')" prop="type_id">
+            <el-select v-model="news.type_id" name="type" placeholder="Pilih Jenis">
               <el-option
-                v-for="item in optionsType"
+                v-for="item in hoaxTypes"
                 :key="item.id"
-                :label="item.name"
+                :label="item.title"
                 :value="item.id"
               />
             </el-select>
           </el-form-item>
 
-          <el-form-item label="Konten Berita" prop="content">
+          <el-form-item :label="$t('label.news-content')" prop="content">
             <div>
               <tinymce v-model="news.content" :height="300" name="content" />
             </div>
@@ -59,7 +59,7 @@
 import AttachmentPhotoUpload from '@/components/AttachmentPhotoUpload'
 import { containsWhitespace } from '@/utils/validate'
 import { fetchRecord, create, update } from '@/api/newsHoax'
-import { fetchList } from '@/api/categories'
+import { fetchList, hoaxTypes } from '@/api/categories'
 import Tinymce from '@/components/Tinymce'
 import moment from 'moment'
 import { mapGetters } from 'vuex'
@@ -75,14 +75,14 @@ export default {
   data() {
     const validatorTitleWhitespace = (rule, value, callback) => {
       if (containsWhitespace(value) === true) {
-        callback(new Error('Judul Berita yang diisi tidak valid'))
+        callback(new Error(this.$t('label.news-title-not-valid')))
       }
       callback()
     }
 
     const validatorTitleWhitespaceContent = (rule, value, callback) => {
       if (containsWhitespace(value) === true) {
-        callback(new Error('Konten Berita yang diisi tidak valid'))
+        callback(new Error(this.$t('label.news-content-not-valid')))
       }
       callback()
     }
@@ -90,11 +90,13 @@ export default {
     return {
       loading: false,
       optionsCategory: [],
-      optionsType: [],
+      hoaxTypes: [],
       news: {
         title: null,
         category_id: null,
+        type_id: null,
         category: null,
+        type: null,
         source_date: moment().startOf('day'),
         content: null,
         seq: null,
@@ -105,17 +107,17 @@ export default {
         title: [
           {
             required: true,
-            message: 'Judul Berita harus diisi',
+            message: this.$t('errors.news-title-null'),
             trigger: 'blur'
           },
           {
             min: 10,
-            message: 'Judul Berita minimal 10 karakter',
+            message: this.$t('errors.news-title-must-be-at-least-10-characters'),
             trigger: 'blur'
           },
           {
             max: 100,
-            message: 'Judul Berita maksimal 100 karakter',
+            message: this.$t('errors.news-title-must-be-at-least-100-characters'),
             trigger: 'blur'
           },
           {
@@ -126,14 +128,21 @@ export default {
         category_id: [
           {
             required: true,
-            message: 'Kategori Berita harus diisi',
+            message: this.$t('errors.news-category-null'),
+            trigger: 'change'
+          }
+        ],
+        type_id: [
+          {
+            required: true,
+            message: this.$t('errors.news-type-null'),
             trigger: 'change'
           }
         ],
         content: [
           {
             required: true,
-            message: 'Konten Berita harus diisi',
+            message: this.$t('errors.news-content-null'),
             trigger: 'blur'
           },
           {
@@ -158,6 +167,7 @@ export default {
       this.fetchData(id)
     }
     this.getNewsChannel()
+    this.getHoaxTypes()
   },
   methods: {
     fetchData(id) {
@@ -219,6 +229,12 @@ export default {
     getNewsChannel() {
       fetchList(this.query).then(response => {
         this.optionsCategory = response.data.items
+      })
+    },
+
+    getHoaxTypes() {
+      hoaxTypes().then(response => {
+        this.hoaxTypes = response.data.items
       })
     }
   }

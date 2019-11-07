@@ -312,7 +312,16 @@ export default {
     'survey-compare-date': 'Tanggal berakhir survei harus lebih besar dari tanggal mulai survei.',
     'survey-change-date': 'Untuk melakukan publikasi survei, tanggal mulai harus diisi hari ini.',
 
+    'news-title-null': 'Judul Berita harus diisi',
+    'news-title-must-be-at-least-10-characters': 'Judul Berita minimal 10 karakter',
+    'news-title-must-be-at-least-100-characters': 'Judul Berita maksimal 100 karakter',
+    'news-category-null': 'Kategori Berita harus diisi',
+    'news-type-null': 'Jenis Berita harus diisi',
+    'news-content-null': 'Konten Berita harus diisi',
     'news-image-null': 'Gambar tidak boleh kosong.',
+    'news-title-not-valid': 'Judul Berita yang diisi tidak valid.',
+    'news-content-not-valid': 'Konten Berita yang diisi tidak valid.',
+
     'banner-image-null': 'Gambar tidak boleh kosong.',
     'popup-image-null': 'Gambar tidak boleh kosong.',
     'popup-title-not-null': 'Judul Pop Up harus diisi.',
@@ -396,6 +405,7 @@ export default {
   },
   label: {
     'notes': 'Catatan:',
+    'date': 'Tanggal:',
     'maximum-dimension-image': 'Ukuran maksimal 1280x720 pixel (Landscape)',
     'maximum-size-image': 'Maximum upload file size: 5 Mb.',
 
@@ -444,11 +454,15 @@ export default {
     'actions': 'Actions',
     'scheduled': 'Jadwal',
     'category': 'Kategori',
+    'type': 'Jenis',
     'created_at': 'Dibuat',
     'description': 'Isi Pesan',
     'select-file': 'Pilih File',
     'title-broadcast': 'Judul Pesan',
     'scheduled_datetime': 'Tanggal dan Waktu',
+
+    'news-title': 'Judul Berita',
+    'news-content': 'Konten Berita',
 
     'status': 'Status',
     'status-draft': 'Draft',

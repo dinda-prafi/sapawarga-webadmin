@@ -26,8 +26,8 @@
           </el-form-item>
         </el-col>
         <el-col :span="6">
-          <el-button type="primary" size="small" @click="submitSearch">Cari</el-button>
-          <el-button type="primary" size="small" @click="resetFilter">Reset</el-button>
+          <el-button type="primary" size="small" @click="submitSearch">{{ $t('crud.search') }}</el-button>
+          <el-button type="primary" size="small" @click="resetFilter">{{ $t('crud.reset') }}</el-button>
         </el-col>
       </el-row>
     </el-form>

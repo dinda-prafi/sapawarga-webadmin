@@ -35,8 +35,9 @@
               </el-tag>
             </template>
           </el-table-column>
-          <el-table-column prop="category.name" align="center" label="Kategori" sortable="custom" />
-          <el-table-column prop="source_date" align="center" label="Tanggal" sortable="custom" />
+          <el-table-column prop="category.name" align="center" :label="$t('label.type')" sortable="custom" />
+          <el-table-column prop="category.name" align="center" :label="$t('label.category')" sortable="custom" />
+          <el-table-column prop="source_date" align="center" :label="$t('label.date')" sortable="custom" />
 
           <el-table-column align="center" label="Actions" min-width="130">
             <template slot-scope="scope">

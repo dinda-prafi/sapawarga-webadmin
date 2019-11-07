@@ -15,6 +15,13 @@ export function fetchRecord(id) {
   })
 }
 
+export function hoaxTypes() {
+  return request({
+    url: `http://52.74.74.33:3000/v1/hoax-types`,
+    method: 'get'
+  })
+}
+
 export function fetchTypes() {
   return request({
     url: `/categories/types`,
@@ -47,6 +54,7 @@ export function deleteData(id) {
 
 const exportFunctions = {
   fetchList,
+  hoaxTypes,
   fetchRecord,
   fetchTypes,
   create,
