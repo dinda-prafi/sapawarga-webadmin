@@ -14,7 +14,18 @@
           <el-form-item label="Kategori" prop="category_id">
             <el-select v-model="news.category_id" name="category" placeholder="Pilih Kategori">
               <el-option
-                v-for="item in options"
+                v-for="item in optionsCategory"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              />
+            </el-select>
+          </el-form-item>
+
+          <el-form-item label="Jenis" prop="jenis_id">
+            <el-select v-model="news.category_id" name="jenis" placeholder="Pilih Jenis">
+              <el-option
+                v-for="item in optionsType"
                 :key="item.id"
                 :label="item.name"
                 :value="item.id"
@@ -78,7 +89,8 @@ export default {
 
     return {
       loading: false,
-      options: [],
+      optionsCategory: [],
+      optionsType: [],
       news: {
         title: null,
         category_id: null,
@@ -206,7 +218,7 @@ export default {
 
     getNewsChannel() {
       fetchList(this.query).then(response => {
-        this.options = response.data.items
+        this.optionsCategory = response.data.items
       })
     }
   }
