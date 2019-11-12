@@ -14,7 +14,7 @@
           <el-form-item :label="$t('label.news-title')" prop="category_id">
             <el-select v-model="news.category_id" name="category" placeholder="Pilih Kategori">
               <el-option
-                v-for="item in optionsCategory"
+                v-for="item in newsHoaxCategory"
                 :key="item.id"
                 :label="item.name"
                 :value="item.id"
@@ -25,7 +25,7 @@
           <el-form-item :label="$t('label.type')" prop="type_id">
             <el-select v-model="news.type_id" name="type" placeholder="Pilih Jenis">
               <el-option
-                v-for="item in hoaxTypes"
+                v-for="item in newsHoaxTypes"
                 :key="item.id"
                 :label="item.title"
                 :value="item.id"
@@ -89,8 +89,8 @@ export default {
 
     return {
       loading: false,
-      optionsCategory: [],
-      hoaxTypes: [],
+      newsHoaxCategory: [],
+      newsHoaxTypes: [],
       news: {
         title: null,
         category_id: null,
@@ -228,13 +228,13 @@ export default {
 
     getNewsChannel() {
       fetchList(this.query).then(response => {
-        this.optionsCategory = response.data.items
+        this.newsHoaxCategory = response.data.items
       })
     },
 
     getHoaxTypes() {
       hoaxTypes().then(response => {
-        this.hoaxTypes = response.data.items
+        this.newsHoaxTypes = response.data.items
       })
     }
   }

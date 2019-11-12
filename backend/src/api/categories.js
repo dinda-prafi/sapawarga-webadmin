@@ -17,7 +17,7 @@ export function fetchRecord(id) {
 
 export function hoaxTypes() {
   return request({
-    url: `http://52.74.74.33:3000/v1/hoax-types`,
+    url: `/hoax-types`,
     method: 'get'
   })
 }
