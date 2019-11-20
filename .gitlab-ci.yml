@@ -48,32 +48,32 @@ stages:
 #       codequality: gl-code-quality-report.json
 #     expire_in: 1 week
 
-# build_prod:
-#   image: docker:stable
-#   stage: build
-#   only:
-#     - branches
-#   services:
-#     - docker:dind
-#   variables:
-#     DOCKER_DRIVER: overlay2
-#   dependencies: 
-#     - versioning
-#   before_script:
-#     - export VERSION=$(cat ./version)
-#     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-#     - apk add --no-cache py-pip python-dev libffi-dev openssl-dev gcc libc-dev make
-#     - pip install docker-compose
-#   script:
-#     - cp .env-template .env
-#     - sed -i "s/%NODE_ENV%/production/g" .env
-#     - sed -i "s/%VUE_APP_BASE_API%/${VUE_APP_BASE_API}/g" .env
-#     - sed -i "s/%SENTRY_DSN_API%/${SENTRY_DSN_API}/g" .env
-#     - sed -i "s/%GOOGLE_MAPS_WEB_API_KEY%/${GOOGLE_MAPS_WEB_API_KEY}/g" .env
-#     - cat .env
-#     - docker-compose build
-#     - docker images
-#     - docker-compose push
+build_prod:
+   image: docker:stable
+   stage: build
+   only:
+     - branches
+   services:
+     - docker:dind
+   variables:
+     DOCKER_DRIVER: overlay2
+   dependencies: 
+     - versioning
+   before_script:
+     - export VERSION=$(cat ./version)
+     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+     - apk add --no-cache py-pip python-dev libffi-dev openssl-dev gcc libc-dev make
+     - pip install docker-compose
+   script:
+     - cp .env-template .env
+     - sed -i "s/%NODE_ENV%/production/g" .env
+     - sed -i "s/%VUE_APP_BASE_API%/${VUE_APP_BASE_API}/g" .env
+     - sed -i "s/%SENTRY_DSN_API%/${SENTRY_DSN_API}/g" .env
+     - sed -i "s/%GOOGLE_MAPS_WEB_API_KEY%/${GOOGLE_MAPS_WEB_API_KEY}/g" .env
+     - cat .env
+     - docker-compose build
+     - docker images
+     - docker-compose push
 
 # test_webadmin:
 #   image: docker:stable
@@ -114,19 +114,11 @@ release_all:
   stage: release
   services:
     - docker:dind
-  # only:
-  #   - master
-  # dependencies: 
-  #   - versioning
-  # variables:
-  #   DOCKER_TLS_CERTDIR: ""
+  only: 
+    - branches
   before_script:
-
-    - export VERSION=v0.2-561-g8a5a4e0
-    # - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    # - apk add --no-cache py-pip python-dev libffi-dev openssl-dev gcc libc-dev make
-    # - pip install docker-compose
-    # - echo $VERSION
+    - export VERSION=(cat ./version)
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
     - cp .env-template .env
     - sed -i "s/%NODE_ENV%/development/g" .env
@@ -136,7 +128,7 @@ release_all:
     - cat .env
     - docker-compose pull
     - docker images
-    # - docker push registry.gitlab.com/jdsteam/sapa-warga/sapawarga-webadmin:${VERSION}
+    - docker push registry.gitlab.com/jdsteam/sapa-warga/sapawarga-webadmin:${VERSION}
 
 # deploy_staging:
 #   image: docker:stable
