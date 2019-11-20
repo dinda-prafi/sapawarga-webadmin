@@ -8,223 +8,225 @@ stages:
   - deploy_staging
   - deploy_prod
 
-versioning:
-  image: alpine:latest
-  stage: versioning
-  before_script:
-    - apk add git
-  script:
-    - export VERSION=$(git describe --tags)
-    - echo $VERSION > version
-    - cat version
-  artifacts:
-    paths:
-      - version
+# versioning:
+#   image: alpine:latest
+#   stage: versioning
+#   before_script:
+#     - apk add git
+#   script:
+#     - export VERSION=$(git describe --tags)
+#     - echo $VERSION > version
+#     - cat version
+#   artifacts:
+#     paths:
+#       - version
 
-code_quality:
-  image: docker:stable
-  stage: code_quality
-  only:
-    - branches
-  services:
-    - docker:stable-dind
-  variables:
-    DOCKER_DRIVER: overlay2
-  dependencies: 
-    - versioning
-  before_script:
-    - export VERSION=$(cat ./version)
-  script:
-    - docker run
-        --env SOURCE_CODE=$PWD
-        --env CONTAINER_TIMEOUT_SECONDS=3600
-        --env CODECLIMATE_DEBUG=1
-        --volume $PWD:/code
-        --volume /var/run/docker.sock:/var/run/docker.sock
-        "registry.gitlab.com/gitlab-org/security-products/codequality:11-8-stable" /code
-  artifacts:
-    paths: [gl-code-quality-report.json]
-    reports:
-      codequality: gl-code-quality-report.json
-    expire_in: 1 week
+# code_quality:
+#   image: docker:stable
+#   stage: code_quality
+#   only:
+#     - branches
+#   services:
+#     - docker:stable-dind
+#   variables:
+#     DOCKER_DRIVER: overlay2
+#   dependencies: 
+#     - versioning
+#   before_script:
+#     - export VERSION=$(cat ./version)
+#   script:
+#     - docker run
+#         --env SOURCE_CODE=$PWD
+#         --env CONTAINER_TIMEOUT_SECONDS=3600
+#         --env CODECLIMATE_DEBUG=1
+#         --volume $PWD:/code
+#         --volume /var/run/docker.sock:/var/run/docker.sock
+#         "registry.gitlab.com/gitlab-org/security-products/codequality:11-8-stable" /code
+#   artifacts:
+#     paths: [gl-code-quality-report.json]
+#     reports:
+#       codequality: gl-code-quality-report.json
+#     expire_in: 1 week
 
-build_prod:
-  image: docker:stable
-  stage: build
-  only:
-    - branches
-  services:
-    - docker:dind
-  variables:
-    DOCKER_DRIVER: overlay2
-  dependencies: 
-    - versioning
-  before_script:
-    - export VERSION=$(cat ./version)
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - apk add --no-cache py-pip python-dev libffi-dev openssl-dev gcc libc-dev make
-    - pip install docker-compose
-  script:
-    - cp .env-template .env
-    - sed -i "s/%NODE_ENV%/production/g" .env
-    - sed -i "s/%VUE_APP_BASE_API%/${VUE_APP_BASE_API}/g" .env
-    - sed -i "s/%SENTRY_DSN_API%/${SENTRY_DSN_API}/g" .env
-    - sed -i "s/%GOOGLE_MAPS_WEB_API_KEY%/${GOOGLE_MAPS_WEB_API_KEY}/g" .env
-    - cat .env
-    - docker-compose build
-    - docker images
-    - docker-compose push
+# build_prod:
+#   image: docker:stable
+#   stage: build
+#   only:
+#     - branches
+#   services:
+#     - docker:dind
+#   variables:
+#     DOCKER_DRIVER: overlay2
+#   dependencies: 
+#     - versioning
+#   before_script:
+#     - export VERSION=$(cat ./version)
+#     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+#     - apk add --no-cache py-pip python-dev libffi-dev openssl-dev gcc libc-dev make
+#     - pip install docker-compose
+#   script:
+#     - cp .env-template .env
+#     - sed -i "s/%NODE_ENV%/production/g" .env
+#     - sed -i "s/%VUE_APP_BASE_API%/${VUE_APP_BASE_API}/g" .env
+#     - sed -i "s/%SENTRY_DSN_API%/${SENTRY_DSN_API}/g" .env
+#     - sed -i "s/%GOOGLE_MAPS_WEB_API_KEY%/${GOOGLE_MAPS_WEB_API_KEY}/g" .env
+#     - cat .env
+#     - docker-compose build
+#     - docker images
+#     - docker-compose push
 
-test_webadmin:
-  image: docker:stable
-  stage: test
-  only:
-    - branches
-  services:
-    - docker:dind
-  dependencies: 
-    - versioning
-  before_script:
-    - export VERSION=$(cat ./version)
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - apk add --no-cache py-pip python-dev libffi-dev openssl-dev gcc libc-dev make
-    - pip install docker-compose
-  script:
-    - cp .env-template .env
-    - sed -i "s/%NODE_ENV%/development/g" .env
-    - sed -i "s/%VUE_APP_BASE_API%/${VUE_APP_BASE_API}/g" .env
-    - sed -i "s/%SENTRY_DSN_API%/${SENTRY_DSN_API}/g" .env
-    - sed -i "s/%GOOGLE_MAPS_WEB_API_KEY%/${GOOGLE_MAPS_WEB_API_KEY}/g" .env
-    - cat .env
-    - docker-compose pull
-    - docker images
-    - COMPOSE_HTTP_TIMEOUT=500 docker-compose up -d
-    - sleep 60
-    - docker ps
-    - docker-compose exec -T app npm run lint
-    - docker-compose exec -T app npm run test:unit
-  artifacts:
-    untracked: false
-    expire_in: 7 days
-    paths:
-      - coverage/
+# test_webadmin:
+#   image: docker:stable
+#   stage: test
+#   only:
+#     - branches
+#   services:
+#     - docker:dind
+#   dependencies: 
+#     - versioning
+#   before_script:
+#     - export VERSION=$(cat ./version)
+#     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+#     - apk add --no-cache py-pip python-dev libffi-dev openssl-dev gcc libc-dev make
+#     - pip install docker-compose
+#   script:
+#     - cp .env-template .env
+#     - sed -i "s/%NODE_ENV%/development/g" .env
+#     - sed -i "s/%VUE_APP_BASE_API%/${VUE_APP_BASE_API}/g" .env
+#     - sed -i "s/%SENTRY_DSN_API%/${SENTRY_DSN_API}/g" .env
+#     - sed -i "s/%GOOGLE_MAPS_WEB_API_KEY%/${GOOGLE_MAPS_WEB_API_KEY}/g" .env
+#     - cat .env
+#     - docker-compose pull
+#     - docker images
+#     - COMPOSE_HTTP_TIMEOUT=500 docker-compose up -d
+#     - sleep 60
+#     - docker ps
+#     - docker-compose exec -T app npm run lint
+#     - docker-compose exec -T app npm run test:unit
+#   artifacts:
+#     untracked: false
+#     expire_in: 7 days
+#     paths:
+#       - coverage/
 
 
 release_all:
-  image: docker:stable
+  image: tiangolo/docker-with-compose
   stage: release
   services:
     - docker:dind
-  only:
-    - master
-  dependencies: 
-    - versioning
+  # only:
+  #   - master
+  # dependencies: 
+  #   - versioning
+  # variables:
+  #   DOCKER_TLS_CERTDIR: ""
   before_script:
-    - export VERSION=$(cat ./version)
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - apk add --no-cache py-pip python-dev libffi-dev openssl-dev gcc libc-dev make
-    - pip install docker-compose
-    - echo $VERSION
+    - export VERSION=v0.2-561-g8a5a4e0
+    # - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    # - apk add --no-cache py-pip python-dev libffi-dev openssl-dev gcc libc-dev make
+    # - pip install docker-compose
+    # - echo $VERSION
   script:
     - cp .env-template .env
     - sed -i "s/%NODE_ENV%/development/g" .env
-    - sed -i "s/%VUE_APP_BASE_API%/${VUE_APP_BASE_API}/g" .env
-    - sed -i "s/%SENTRY_DSN_API%/${SENTRY_DSN_API}/g" .env
-    - sed -i "s/%GOOGLE_MAPS_WEB_API_KEY%/${GOOGLE_MAPS_WEB_API_KEY}/g" .env
+    - sed -i "s/%VUE_APP_BASE_API%/https:\/\/sapawarga.jabarprov.go.id\/api\/v1\//g" .env
+    - sed -i "s/%SENTRY_DSN_API%/https:\/\/a28d13fa18d04acd98a3426d83ff094a@sentry.io\/1725236/g" .env
+    - sed -i "s/%GOOGLE_MAPS_WEB_API_KEY%/AIzaSyCnClOlsVXxFGuzC3kRHYp9h1DFYfMYrbA/g" .env
     - cat .env
     - docker-compose pull
     - echo $VERSION
     - docker images
-    - docker push registry.gitlab.com/jdsteam/sapa-warga/sapawarga-webadmin:${VERSION}
+    # - docker push registry.gitlab.com/jdsteam/sapa-warga/sapawarga-webadmin:${VERSION}
 
-deploy_staging:
-  image: docker:stable
-  stage: deploy_staging
-  only:
-    - master
-  dependencies: 
-    - versioning
-  before_script:
-    - export VERSION=$(cat ./version)
-    - 'which ssh-agent || ( apk update && apk add openssh-client )'
-    - mkdir -p ~/.ssh
-    - eval $(ssh-agent -s)
-    - chmod 400 $SSH_STAGING_KEY_PRIVATE_AWS
-    - ssh-add $SSH_STAGING_KEY_PRIVATE_AWS
-  script:
-    - ssh -o StrictHostKeyChecking=no ${SSH_STAGING_USERNAME_AWS}@${STAGING_HOST_AWS} "docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY"
-    - ssh -o StrictHostKeyChecking=no ${SSH_STAGING_USERNAME_AWS}@${STAGING_HOST_AWS} "export VERSION=${VERSION} && cd /home/ubuntu/projects/sapawarga-webadmin && sudo git pull && sudo -E docker-compose pull && sudo -E docker-compose down && sudo -E docker-compose up -d"
-    - ssh -o StrictHostKeyChecking=no ${SSH_STAGING_USERNAME_AWS}@${STAGING_HOST_AWS} "sudo docker ps"
-    - ssh -o StrictHostKeyChecking=no ${SSH_STAGING_USERNAME_AWS}@${STAGING_HOST_AWS} "sudo docker image prune -a -f"
+# deploy_staging:
+#   image: docker:stable
+#   stage: deploy_staging
+#   only:
+#     - master
+#   dependencies: 
+#     - versioning
+#   before_script:
+#     - export VERSION=$(cat ./version)
+#     - 'which ssh-agent || ( apk update && apk add openssh-client )'
+#     - mkdir -p ~/.ssh
+#     - eval $(ssh-agent -s)
+#     - chmod 400 $SSH_STAGING_KEY_PRIVATE_AWS
+#     - ssh-add $SSH_STAGING_KEY_PRIVATE_AWS
+#   script:
+#     - ssh -o StrictHostKeyChecking=no ${SSH_STAGING_USERNAME_AWS}@${STAGING_HOST_AWS} "docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY"
+#     - ssh -o StrictHostKeyChecking=no ${SSH_STAGING_USERNAME_AWS}@${STAGING_HOST_AWS} "export VERSION=${VERSION} && cd /home/ubuntu/projects/sapawarga-webadmin && sudo git pull && sudo -E docker-compose pull && sudo -E docker-compose down && sudo -E docker-compose up -d"
+#     - ssh -o StrictHostKeyChecking=no ${SSH_STAGING_USERNAME_AWS}@${STAGING_HOST_AWS} "sudo docker ps"
+#     - ssh -o StrictHostKeyChecking=no ${SSH_STAGING_USERNAME_AWS}@${STAGING_HOST_AWS} "sudo docker image prune -a -f"
 
-deploy_staging_eks:
-  image: dtzar/helm-kubectl
-  stage: deploy_staging
-  only:
-    - master
-  dependencies: 
-    - versioning
-  environment:
-    name: staging
-  before_script:
-    - export VERSION=$(cat ./version)
-    - kubectl config set-cluster k8s --server="${EKS_SERVER_V2}"
-    - kubectl config set clusters.k8s.certificate-authority-data ${EKS_CA_V2}
-    - kubectl config set-credentials gitlab-eks-admin-development --token="${EKS_TOKEN_V2}"
-    - kubectl config set-context default --cluster=k8s --user=gitlab-eks-admin-development
-    - kubectl config use-context default
-    - kubectl cluster-info
-  script:
-    # Copy template samples #
-    - cp kubernetes/webadmin-variables-sample.yaml kubernetes/webadmin-variables.yaml
-    # Add ENV for apps # VUE_APP_NODE_ENV
-    - sed -i "s/%VUE_APP_VERSION%/${VERSION}/g" kubernetes/webadmin-variables.yaml
-    - sed -i "s/%VUE_APP_NODE_ENV%/${VUE_APP_NODE_ENV}/g" kubernetes/webadmin-variables.yaml
-    # Vue app base api to staging
-    - sed -i "s/%VUE_APP_BASE_API%/${EKS_VUE_APP_BASE_API_STAGING}/g" kubernetes/webadmin-variables.yaml
-    - sed -i "s/%dockerconfigjson%/${dockerconfigjson}/g" kubernetes/webadmin-variables.yaml
-    - sed -i "s/%SENTRY_DSN_API%/${SENTRY_DSN_API}/g" kubernetes/webadmin-variables.yaml
-    - sed -i "s/%APP_ERROR_ENVIRONMENT%/${APP_ERROR_ENVIRONMENT}/g" kubernetes/webadmin-variables.yaml
-    - sed -i "s/%VERSION%/${VERSION}/g" kubernetes/webadmin-deployment.yaml
+# deploy_staging_eks:
+#   image: dtzar/helm-kubectl
+#   stage: deploy_staging
+#   only:
+#     - master
+#   dependencies: 
+#     - versioning
+#   environment:
+#     name: staging
+#   before_script:
+#     - export VERSION=$(cat ./version)
+#     - kubectl config set-cluster k8s --server="${EKS_SERVER_V2}"
+#     - kubectl config set clusters.k8s.certificate-authority-data ${EKS_CA_V2}
+#     - kubectl config set-credentials gitlab-eks-admin-development --token="${EKS_TOKEN_V2}"
+#     - kubectl config set-context default --cluster=k8s --user=gitlab-eks-admin-development
+#     - kubectl config use-context default
+#     - kubectl cluster-info
+#   script:
+#     # Copy template samples #
+#     - cp kubernetes/webadmin-variables-sample.yaml kubernetes/webadmin-variables.yaml
+#     # Add ENV for apps # VUE_APP_NODE_ENV
+#     - sed -i "s/%VUE_APP_VERSION%/${VERSION}/g" kubernetes/webadmin-variables.yaml
+#     - sed -i "s/%VUE_APP_NODE_ENV%/${VUE_APP_NODE_ENV}/g" kubernetes/webadmin-variables.yaml
+#     # Vue app base api to staging
+#     - sed -i "s/%VUE_APP_BASE_API%/${EKS_VUE_APP_BASE_API_STAGING}/g" kubernetes/webadmin-variables.yaml
+#     - sed -i "s/%dockerconfigjson%/${dockerconfigjson}/g" kubernetes/webadmin-variables.yaml
+#     - sed -i "s/%SENTRY_DSN_API%/${SENTRY_DSN_API}/g" kubernetes/webadmin-variables.yaml
+#     - sed -i "s/%APP_ERROR_ENVIRONMENT%/${APP_ERROR_ENVIRONMENT}/g" kubernetes/webadmin-variables.yaml
+#     - sed -i "s/%VERSION%/${VERSION}/g" kubernetes/webadmin-deployment.yaml
     
-    - cat kubernetes/webadmin-variables.yaml
-    - kubectl create --dry-run --validate -f kubernetes/webadmin-variables.yaml
-        -f kubernetes/webadmin-deployment.yaml
-        -f kubernetes/webadmin-service.yaml # mode development
-    - kubectl apply -f kubernetes/webadmin-variables.yaml
-        -f kubernetes/webadmin-deployment.yaml
-        -f kubernetes/webadmin-service.yaml # mode development
+#     - cat kubernetes/webadmin-variables.yaml
+#     - kubectl create --dry-run --validate -f kubernetes/webadmin-variables.yaml
+#         -f kubernetes/webadmin-deployment.yaml
+#         -f kubernetes/webadmin-service.yaml # mode development
+#     - kubectl apply -f kubernetes/webadmin-variables.yaml
+#         -f kubernetes/webadmin-deployment.yaml
+#         -f kubernetes/webadmin-service.yaml # mode development
 
-deploy_prod_eks:
-  stage: deploy_prod
-  image: dtzar/helm-kubectl
-  when: manual
-  environment:
-    name: production
-  only:
-    - master
-  dependencies: 
-    - versioning
-  before_script:
-    - export VERSION=$(cat ./version)
-    - kubectl config set-cluster k8s --server="${EKS_SERVER_V2}"
-    - kubectl config set clusters.k8s.certificate-authority-data ${EKS_CA_V2}
-    - kubectl config set-credentials gitlab-eks-admin-development --token="${EKS_TOKEN_V2}"
-    - kubectl config set-context default --cluster=k8s --user=gitlab-eks-admin-development
-    - kubectl config use-context default
-    - kubectl cluster-info
-  script:
-    - cp kubernetes/webadmin-variables-sample.yaml kubernetes/webadmin-variables.yaml
-    - sed -i "s/%VUE_APP_VERSION%/${VERSION}/g" kubernetes/webadmin-variables.yaml
-    - sed -i "s/%VUE_APP_NODE_ENV%/${VUE_APP_NODE_ENV}/g" kubernetes/webadmin-variables.yaml
-    - sed -i "s/%VUE_APP_BASE_API%/${EKS_VUE_APP_BASE_API}/g" kubernetes/webadmin-variables.yaml
-    - sed -i "s/%dockerconfigjson%/${dockerconfigjson}/g" kubernetes/webadmin-variables.yaml
-    - sed -i "s/%SENTRY_DSN_API%/${SENTRY_DSN_API}/g" kubernetes/webadmin-variables.yaml
-    - sed -i "s/%APP_ERROR_ENVIRONMENT%/${APP_ERROR_ENVIRONMENT}/g" kubernetes/webadmin-variables.yaml
-    - sed -i "s/%VERSION%/${VERSION}/g" kubernetes/webadmin-deployment.yaml
-    - kubectl create --dry-run --validate -f kubernetes/webadmin-variables.yaml
-        -f kubernetes/webadmin-deployment.yaml
-        -f kubernetes/webadmin-service.yaml
-    - kubectl apply -f kubernetes/webadmin-variables.yaml
-        -f kubernetes/webadmin-deployment.yaml
-        -f kubernetes/webadmin-service.yaml
+# deploy_prod_eks:
+#   stage: deploy_prod
+#   image: dtzar/helm-kubectl
+#   when: manual
+#   environment:
+#     name: production
+#   only:
+#     - master
+#   dependencies: 
+#     - versioning
+#   before_script:
+#     - export VERSION=$(cat ./version)
+#     - kubectl config set-cluster k8s --server="${EKS_SERVER_V2}"
+#     - kubectl config set clusters.k8s.certificate-authority-data ${EKS_CA_V2}
+#     - kubectl config set-credentials gitlab-eks-admin-development --token="${EKS_TOKEN_V2}"
+#     - kubectl config set-context default --cluster=k8s --user=gitlab-eks-admin-development
+#     - kubectl config use-context default
+#     - kubectl cluster-info
+#   script:
+#     - cp kubernetes/webadmin-variables-sample.yaml kubernetes/webadmin-variables.yaml
+#     - sed -i "s/%VUE_APP_VERSION%/${VERSION}/g" kubernetes/webadmin-variables.yaml
+#     - sed -i "s/%VUE_APP_NODE_ENV%/${VUE_APP_NODE_ENV}/g" kubernetes/webadmin-variables.yaml
+#     - sed -i "s/%VUE_APP_BASE_API%/${EKS_VUE_APP_BASE_API}/g" kubernetes/webadmin-variables.yaml
+#     - sed -i "s/%dockerconfigjson%/${dockerconfigjson}/g" kubernetes/webadmin-variables.yaml
+#     - sed -i "s/%SENTRY_DSN_API%/${SENTRY_DSN_API}/g" kubernetes/webadmin-variables.yaml
+#     - sed -i "s/%APP_ERROR_ENVIRONMENT%/${APP_ERROR_ENVIRONMENT}/g" kubernetes/webadmin-variables.yaml
+#     - sed -i "s/%VERSION%/${VERSION}/g" kubernetes/webadmin-deployment.yaml
+#     - kubectl create --dry-run --validate -f kubernetes/webadmin-variables.yaml
+#         -f kubernetes/webadmin-deployment.yaml
+#         -f kubernetes/webadmin-service.yaml
+#     - kubectl apply -f kubernetes/webadmin-variables.yaml
+#         -f kubernetes/webadmin-deployment.yaml
+#         -f kubernetes/webadmin-service.yaml
