@@ -8,7 +8,7 @@ stages:
   - deploy_staging
   - deploy_prod
 
- versioning:
+versioning:
    image: alpine:latest
    stage: versioning
    before_script:
