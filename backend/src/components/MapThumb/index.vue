@@ -53,13 +53,13 @@ export default {
         );
 
         this.tileLayer.addTo(this.map);
-        this.initLayers();
+        this.initMarker();
       } catch (error) {
         console.error(error);
         this.$message.error(this.$t("map-error"));
       }
     },
-    initLayers() {
+    initMarker() {
       const leafletObject = L.marker([this.latitude, this.longitude]).addTo(
         this.map
       );
