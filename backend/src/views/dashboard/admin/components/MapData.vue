@@ -65,10 +65,6 @@ export default {
       map: null,
       activeInfoWindow: null,
       labelTitle: "Kota/Kabupaten",
-      jawaBarat: {
-        lat: -6.943097,
-        lon: 107.633545
-      },
       zoom: 8,
       markerCenter: null,
       isChecked: {
@@ -94,19 +90,21 @@ export default {
   },
 
   mounted() {
-    this.getMap();
+    this.getAPIData();
   },
+
   methods: {
-    getMap() {
+    getAPIData() {
       fetchAspirasiMap(this.listQuery).then(response => {
         this.list = response.data;
-        this.createMap(this.list);
+        this.initMap(this.list);
       });
     },
-    createMap(dataMap) {
+    initMap(dataMap) {
       try {
         this.map = L.map("leafletmap").setView(
-          [this.jawaBarat.lat, this.jawaBarat.lon],
+          // Set first location result as center
+          [this.list[0].latitude, this.list[0].longitude],
           this.zoom
         );
         this.tileLayer = L.tileLayer(
@@ -118,13 +116,14 @@ export default {
           }
         );
         this.tileLayer.addTo(this.map);
-        this.initLayers(dataMap);
+        this.initMarkers(dataMap);
       } catch (error) {
         console.error(error);
         this.$message.error(this.$t("dashboard-map-error"));
       }
     },
-    initLayers(dataMap) {
+    initMarkers(dataMap) {
+      const coordinates=[];
       dataMap.forEach(feature => {
         feature.leafletObject = L.marker([feature.latitude, feature.longitude])
           .bindTooltip(`${feature.name} : ${feature.counts} Usulan`)
@@ -132,11 +131,9 @@ export default {
             this.checkLevel(feature.id);
           })
           .addTo(this.map);
+          coordinates.push([feature.latitude, feature.longitude])
       });
-    },
-    destroyMap() {
-      this.map.off();
-      this.map.remove();
+      this.map.fitBounds(coordinates)
     },
     checkLevel(id) {
       if (this.isChecked.kabkota) {
@@ -158,15 +155,13 @@ export default {
       } else if (this.isChecked.kel) {
         this.listQuery.kel_id = id;
       }
-      this.destroyMap();
-      this.getMap();
+      this.reinitMap();
     },
     viewMarker(id) {
       if (this.isChecked.kel) {
         return;
       }
       this.checkLevel(id);
-      this.getMap();
     },
     resetLevel() {
       if (this.isChecked.kabkota) {
@@ -186,8 +181,12 @@ export default {
         kel_id: null
       };
 
-      this.destroyMap();
-      this.getMap();
+      this.reinitMap();
+    },
+    reinitMap() {
+      this.map.off();
+      this.map.remove();
+      this.getAPIData();
     }
   }
 };
