@@ -103,7 +103,6 @@ export default {
     initMap(dataMap) {
       try {
         this.map = L.map("leafletmap").setView(
-          // Set first location result as center
           [this.list[0].latitude, this.list[0].longitude],
           this.zoom
         );
