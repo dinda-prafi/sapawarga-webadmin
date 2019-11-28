@@ -1,5 +1,5 @@
 <template>
-  <div id="leafletmap" />
+  <div id="leafletmap" ref="mapElement" />
 </template>
 
 <script>
@@ -54,8 +54,8 @@ export default {
         this.tileLayer.addTo(this.map);
         this.initMarker();
       } catch (error) {
-        console.error(error);
-        this.$message.error(this.$t('map-error'));
+        console.error(error)
+        // this.$message.error(this.$t('map-error'))
       }
     },
     initMarker() {

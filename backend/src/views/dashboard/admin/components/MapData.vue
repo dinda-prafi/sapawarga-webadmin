@@ -119,8 +119,8 @@ export default {
         this.tileLayer.addTo(this.map);
         this.initMarkers(dataMap);
       } catch (error) {
-        console.error(error);
-        this.$message.error(this.$t('dashboard-map-error'));
+        console.error(error)
+        // this.$message.error(this.$t('dashboard-map-error'))
       }
     },
     initMarkers(dataMap) {
