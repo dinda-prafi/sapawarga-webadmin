@@ -53,9 +53,9 @@
 </template>
 
 <script>
-import { fetchAspirasiMap } from "@/api/dashboard";
-import { mapGetters } from "vuex";
-import L from "leaflet";
+import { fetchAspirasiMap } from '@/api/dashboard'
+import { mapGetters } from 'vuex'
+import L from 'leaflet'
 
 export default {
   data() {
@@ -63,7 +63,7 @@ export default {
       list: null,
       map: null,
       activeInfoWindow: null,
-      labelTitle: "Kota/Kabupaten",
+      labelTitle: 'Kota/Kabupaten',
       zoom: 8,
       markerCenter: null,
       isChecked: {
@@ -76,119 +76,119 @@ export default {
         kec_id: null,
         kel_id: null
       }
-    };
+    }
   },
 
   computed: {
-    ...mapGetters(["sidebar"]),
+    ...mapGetters(['sidebar']),
     classObj() {
       return {
         openSidebar: this.sidebar.opened
-      };
+      }
     }
   },
 
   mounted() {
-    this.getAPIData();
+    this.getAPIData()
   },
 
   methods: {
     getAPIData() {
       fetchAspirasiMap(this.listQuery).then(response => {
-        this.list = response.data;
-        this.initMap(this.list);
-      });
+        this.list = response.data
+        this.initMap(this.list)
+      })
     },
     initMap(dataMap) {
       try {
-        this.map = L.map("leafletmap").setView(
+        this.map = L.map('leafletmap').setView(
           [this.list[0].latitude, this.list[0].longitude],
           this.zoom
-        );
+        )
         this.tileLayer = L.tileLayer(
-          "https://cartodb-basemaps-{s}.global.ssl.fastly.net/rastertiles/voyager/{z}/{x}/{y}.png",
+          'https://cartodb-basemaps-{s}.global.ssl.fastly.net/rastertiles/voyager/{z}/{x}/{y}.png',
           {
             maxZoom: 18,
             attribution:
               '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="https://carto.com/attribution">CARTO</a>'
           }
-        );
-        this.tileLayer.width = 1500;
-        this.tileLayer.addTo(this.map);
-        this.initMarkers(dataMap);
+        )
+        this.tileLayer.width = 1500
+        this.tileLayer.addTo(this.map)
+        this.initMarkers(dataMap)
       } catch (error) {
-        console.error(error);
-        this.$message.error(this.$t("dashboard-map-error"));
+        console.error(error)
+        this.$message.error(this.$t('dashboard-map-error'))
       }
     },
     initMarkers(dataMap) {
-      const coordinates = [];
+      const coordinates = []
       dataMap.forEach(feature => {
         feature.leafletObject = L.marker([feature.latitude, feature.longitude])
           .bindTooltip(`${feature.name} : ${feature.counts} Usulan`)
-          .on("click", () => {
-            this.checkLevel(feature.id);
+          .on('click', () => {
+            this.checkLevel(feature.id)
           })
-          .addTo(this.map);
-        coordinates.push([feature.latitude, feature.longitude]);
-      });
-      this.map.fitBounds(coordinates);
+          .addTo(this.map)
+        coordinates.push([feature.latitude, feature.longitude])
+      })
+      this.map.fitBounds(coordinates)
     },
     checkLevel(id) {
       if (this.isChecked.kabkota) {
-        this.listQuery.kabkota_id = id;
+        this.listQuery.kabkota_id = id
 
         // change label
-        this.labelTitle = "Kecamatan";
+        this.labelTitle = 'Kecamatan'
 
         // isCheck
-        this.isChecked = { kabkota: false, kec: true };
+        this.isChecked = { kabkota: false, kec: true }
       } else if (this.isChecked.kec) {
-        this.listQuery.kec_id = id;
+        this.listQuery.kec_id = id
 
         // change label
-        this.labelTitle = "Kelurahan";
+        this.labelTitle = 'Kelurahan'
 
         // isCheck
-        this.isChecked = { kec: false, kel: true };
+        this.isChecked = { kec: false, kel: true }
       } else if (this.isChecked.kel) {
-        this.listQuery.kel_id = id;
+        this.listQuery.kel_id = id
       }
-      this.reinitMap();
+      this.reinitMap()
     },
     viewMarker(id) {
       if (this.isChecked.kel) {
-        return;
+        return
       }
-      this.checkLevel(id);
+      this.checkLevel(id)
     },
     resetLevel() {
       if (this.isChecked.kabkota) {
-        return;
+        return
       }
 
-      this.labelTitle = "Kota/Kabupaten";
+      this.labelTitle = 'Kota/Kabupaten'
       this.isChecked = {
         kabkota: true,
         kec: false,
         kel: false
-      };
+      }
 
       this.listQuery = {
         kabkota_id: null,
         kec_id: null,
         kel_id: null
-      };
+      }
 
-      this.reinitMap();
+      this.reinitMap()
     },
     reinitMap() {
-      this.map.off();
-      this.map.remove();
-      this.getAPIData();
+      this.map.off()
+      this.map.remove()
+      this.getAPIData()
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>
