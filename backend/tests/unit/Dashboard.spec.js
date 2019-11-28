@@ -39,6 +39,9 @@ describe('List dashboard usulan', () => {
   it('render list usulan', async() => {
     const wrapper = shallowMount(DashboardUsulan, {
       localVue,
+      mocks: {
+        $t: () => {}
+      },
       i18n
     })
 
@@ -64,6 +67,12 @@ describe('List dashboard usulan', () => {
 
     const wrapper = shallowMount(ListFilter, {
       localVue,
+      computed: {
+        roles: () => ['admin']
+      },
+      mocks: {
+        $t: () => {}
+      },
       i18n,
       propsData: {
         listQuery
@@ -84,6 +93,9 @@ describe('List dashboard usulan', () => {
 
     const wrapper = shallowMount(DashboardApproval, {
       localVue,
+      mocks: {
+        $t: () => {}
+      },
       i18n
     })
 
