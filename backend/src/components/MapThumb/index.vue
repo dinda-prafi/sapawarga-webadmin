@@ -59,7 +59,7 @@ export default {
       }
     },
     initMarker() {
-      L.marker([this.latitude, this.longitude]).addTo(this.map);
+      leaflet.marker([this.latitude, this.longitude]).addTo(this.map);
     }
   }
 };
