@@ -2,16 +2,23 @@
   <div class="components-container">
     <el-row :gutter="20">
       <el-col :xs="24" :sm="8" :lg="5">
-        <AttachmentPhotoUpload type="news_photo" :initial-url="news.cover_path_url" style="margin-bottom: 25px" name="news_photo" @onUpload="photoUploaded" />
+        <AttachmentPhotoUpload
+          type="news_photo"
+          :initial-url="news.cover_path_url"
+          :list-information="[this.$t('label.maximum-dimension-image')]"
+          style="margin-bottom: 25px"
+          name="news_photo"
+          @onUpload="photoUploaded"
+        />
       </el-col>
       <el-col :xs="24" :sm="16" :lg="19">
 
         <el-form ref="news" :model="news" :rules="rules" :status-icon="true" label-width="160px">
-          <el-form-item label="Judul Berita" prop="title">
+          <el-form-item :label="$t('label.news-title')" prop="title">
             <el-input v-model="news.title" name="title" type="text" placeholder="Judul Berita" />
           </el-form-item>
 
-          <el-form-item label="Kategori" prop="category_id">
+          <el-form-item :label="$t('label.category')" prop="category_id">
             <el-select v-model="news.category_id" name="category" placeholder="Pilih Kategori">
               <el-option
                 v-for="item in options"
@@ -22,7 +29,7 @@
             </el-select>
           </el-form-item>
 
-          <el-form-item label="Konten Berita" prop="content">
+          <el-form-item :label="$t('label.news-content')" prop="content">
             <div>
               <tinymce v-model="news.content" :height="300" name="content" />
             </div>
@@ -46,7 +53,7 @@
 
 <script>
 import AttachmentPhotoUpload from '@/components/AttachmentPhotoUpload'
-import { containsWhitespace } from '@/utils/validate'
+import { containsWhitespace, isContainHtmlTags } from '@/utils/validate'
 import { fetchRecord, create, update } from '@/api/newsHoax'
 import { fetchList } from '@/api/categories'
 import Tinymce from '@/components/Tinymce'
@@ -62,16 +69,24 @@ export default {
     }
   },
   data() {
+    const validatorHTMLTitle = (rule, value, callback) => {
+      if (isContainHtmlTags(value) === true) {
+        callback(new Error(this.$t('errors.news-title-not-valid-characters')))
+      }
+
+      callback()
+    }
+
     const validatorTitleWhitespace = (rule, value, callback) => {
       if (containsWhitespace(value) === true) {
-        callback(new Error('Judul Berita yang diisi tidak valid'))
+        callback(new Error(this.$t('errors.news-title-not-valid')))
       }
       callback()
     }
 
     const validatorTitleWhitespaceContent = (rule, value, callback) => {
       if (containsWhitespace(value) === true) {
-        callback(new Error('Konten Berita yang diisi tidak valid'))
+        callback(new Error(this.$t('errors.news-content-not-valid')))
       }
       callback()
     }
@@ -93,35 +108,39 @@ export default {
         title: [
           {
             required: true,
-            message: 'Judul Berita harus diisi',
+            message: this.$t('errors.news-title-not-null'),
             trigger: 'blur'
           },
           {
             min: 10,
-            message: 'Judul Berita minimal 10 karakter',
+            message: this.$t('errors.news-title-must-be-at-least-10-characters'),
             trigger: 'blur'
           },
           {
             max: 100,
-            message: 'Judul Berita maksimal 100 karakter',
+            message: this.$t('errors.news-title-must-be-at-least-100-characters'),
             trigger: 'blur'
           },
           {
             validator: validatorTitleWhitespace,
+            trigger: 'blur'
+          },
+          {
+            validator: validatorHTMLTitle,
             trigger: 'blur'
           }
         ],
         category_id: [
           {
             required: true,
-            message: 'Kategori Berita harus diisi',
+            message: this.$t('errors.news-category-not-null'),
             trigger: 'change'
           }
         ],
         content: [
           {
             required: true,
-            message: 'Konten Berita harus diisi',
+            message: this.$t('errors.news-content-not-null'),
             trigger: 'blur'
           },
           {

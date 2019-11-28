@@ -164,6 +164,11 @@ export default {
     'activate-success': 'Data berhasil diaktifkan.',
     'deactivate-success': 'Data berhasil dinonaktifkan.',
 
+    'publish-confirm': 'Anda yakin ingin mempublikasikan usulan ini?',
+    'unpublish-confirm': 'Anda yakin ingin membatalkan usulan ini?',
+    'publish-success': 'Usulan berhasil dipublikasikan',
+    'unpublish-success': 'Usulan berhasil di batalkan',
+
     'delete-confirm': 'Anda yakin ingin menghapus data ini?',
     'delete-success': 'Data berhasil dihapus.',
 
@@ -198,7 +203,7 @@ export default {
     'users-edit': 'Edit Pengguna',
     'users-edit-profile': 'Edit Profil',
     'users-import-data': 'Unggah Data Pengguna Sapawarga',
-    'users-dialog-text-import-csv': 'Anda dapat melakukan unggah data dengan mengunggah file dengan tipe CSV.',
+    'users-dialog-text-import-xlsx': 'Anda dapat melakukan unggah data dengan mengunggah file dengan tipe XLSX.',
     'users-dialog-text-template-file': 'Template file dapat diunduh pada ',
     'users-dialog-text-url': 'Tautan berikut',
     'users-dialog-text-choose-location-file': 'Pilih lokasi file pada komputer Anda (max. 5 MB)',
@@ -252,13 +257,12 @@ export default {
   },
   errors: {
     'internal-server-error': 'Telah terjadi kesalahan sistem, silahkan muat ulang halaman ini.',
+    'request-timeout': 'Telah terjadi kesalahan, periksa kembali koneksi Internet Anda.',
     'url-not-valid': 'URL tidak valid',
-
     'phone-number-must-be-start-0': 'Nomor telepon harus dimulai dari 0',
     'password-dont-match': 'Password tidak sesuai',
     'coordinates-must-be-filled': 'Koordinat Lokasi harus diisi.',
     'coordinates-only-use-numbers-periods': 'Koordinat Lokasi hanya boleh menggunakan angka, titik, - atau +',
-
     'coordinates-dont-match': 'Koordinat Lokasi tidak sesuai',
     'text-not-valid': 'Text yang diisi tidak valid',
 
@@ -322,17 +326,14 @@ export default {
     'popup-title-not-null': 'Judul Pop Up harus diisi.',
     'popup-title-min-10': 'Judul Pop Up minimal 10 Karakter.',
     'popup-title-max-100': 'Judul Pop Up maximal 100 Karakter.',
-
     'popup-kategori-not-null': 'Kategori Pop Up harus diisi.',
     'popup-url-not-null': 'Tautan harus diisi.',
     'popup-type-name-not-null': 'Judul harus diisi.',
-
     'popup-informasi-title': 'Judul pop-up mengandung karakter yang tidak diizinkan.',
     'popup-informasi-description': 'Deskripsi mengandung karakter yang tidak diizinkan.',
 
     'dashboard-map-error': 'Gagal memuat map',
     'broadcast-datetime': 'Jadwal yang dipilih telah lewat',
-
     'popup-fitur-not-null': 'Fitur Pop Up harus diisi.',
     'popup-start-date-not-null': 'Tanggal Mulai harus diisi.',
     'popup-end-date-not-null': 'Tanggal Berakhir harus diisi.',
@@ -348,7 +349,17 @@ export default {
     'news-channels-must-be-filled': 'Sumber Berita harus diisi.',
     'news-channels-must-be-at-least-5-characters': 'Sumber Berita minimal 5 karakter',
     'news-channels-must-be-at-least-25-characters': 'Sumber Berita maksimal 25 karakter',
-    'website-news-channels-already-used': 'Website Sumber Berita sudah digunakan'
+    'website-news-channels-already-used': 'Website Sumber Berita sudah digunakan',
+
+    'news-title-not-valid': 'Judul Berita yang diisi tidak valid',
+    'news-title-not-valid-characters': 'Judul Berita mengandung karakter yang tidak diperbolehkan',
+    'news-content-not-valid': 'Konten Berita yang diisi tidak valid',
+    'news-title-not-null': 'Judul Berita harus diisi',
+    'news-title-must-be-at-least-10-characters': 'Judul Berita minimal 10 karakter',
+    'news-title-must-be-at-least-100-characters': 'Judul Berita maksimal 100 karakter',
+    'news-category-not-null': 'Kategori Berita harus diisi',
+    'news-content-not-null': 'Konten Berita harus diisi'
+
   },
   navbar: {
     'profile': 'Lihat Profil',
@@ -413,7 +424,7 @@ export default {
   label: {
     'sapawarga': 'sapawarga',
     'notes': 'Catatan:',
-    'maximum-dimension-image': 'Ukuran maksimal 1280x720 pixel (Landscape)',
+    'maximum-dimension-image': 'Ukuran maksimal 1280x720 piksel (Landscape)',
     'maximum-size-image': 'Maximum upload file size: 5 Mb.',
 
     'fullname': 'Nama Lengkap',
@@ -459,7 +470,7 @@ export default {
     'maximum-dimension-image-profile': 'Ukuran maksimal 640 x 640 piksel',
     'choose-image-profile': 'Pilih Foto',
 
-    'count-user-each-role': 'Total user aktif per',
+    'count-user-each-role': 'Total user per',
     'widget-all-user': 'Semua',
     'widget-province': 'Provinsi',
     'widget-kabkota': 'Kota/Kab',
@@ -483,16 +494,30 @@ export default {
     'select-file': 'Pilih File',
     'title-broadcast': 'Judul Pesan',
     'scheduled_datetime': 'Tanggal dan Waktu',
+    'date': 'Tanggal',
 
+    'news-title': 'Judul Berita',
+    'news-content': 'Konten Berita',
     'status': 'Status',
     'status-draft': 'Draft',
     'status-scheduled': 'Dijadwalkan',
     'status-published': 'Dipublikasikan',
 
+    'roles-admin': 'Admin',
+    'roles-admin-saber-hoax': 'Admin Saber Hoax',
+    'roles-admin-province': 'Admin Provinsi',
+    'roles-admin-kabkota': 'Admin Kab/kota',
+    'roles-admin-districts': 'Admin Kecamatan',
+    'roles-admin-village': 'Admin Desa/Kelurahan',
+    'roles-admin-rw': 'RW',
+    'roles-trainer': 'Pelatih',
+    'roles-public': 'Publik',
+
     'popular-category': 'Kategori Populer',
     'link-logo-news-channels-manage': 'Tautan Logo Sumber Berita',
     'link': 'Tautan',
 
+    'add-news-counter-hoax': 'Tambah Berita Counter Hoax',
     'newsImportant-description': 'Deskripsi',
     'newsImportant-date-created': 'Tanggal Dibuat',
     'newsImportant-url': 'https://jabarprov.go.id',
@@ -505,6 +530,15 @@ export default {
     'newsImportant-tooltip-nonactive': 'Nonaktifkan Info Pendidikan',
 
     'newsImportant-detail': 'Detail Info Pendidikan',
-    'newsImportant-data': 'Data Info Pendidikan'
+    'newsImportant-data': 'Data Info Pendidikan',
+
+    'aspiration-tooltip-publish': 'Publikasikan Usulan',
+    'aspiration-tooltip-unpublish': 'Batalkan Usulan',
+    'aspiration-tooltip-detail': 'Detail Usulan',
+    'aspiration-title': 'Usulan',
+    'aspiration-like': 'Like',
+    'aspiration-view-all': 'Lihat Semua',
+    'aspiration-accept': 'Diterima',
+    'aspiration-publish': 'Dipublikasikan'
   }
 }
