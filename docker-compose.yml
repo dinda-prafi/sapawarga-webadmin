@@ -15,9 +15,6 @@ services:
       - internal
     ports: 
       - 8081:80
-    # volumes:
-      # - ./backend/src:/app/src
-      # - ./backend/tests:/app/tests
     env_file:
       - .env
     networks:
