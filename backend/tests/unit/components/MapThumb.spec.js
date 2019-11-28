@@ -1,6 +1,7 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils'
 import MapThumb from '@/components/MapThumb'
 import ElementUI from 'element-ui'
+import i18N from '@/lang'
 
 const localVue = createLocalVue()
 localVue.use(ElementUI)
@@ -8,7 +9,8 @@ localVue.use(ElementUI)
 const factory = (values = {}) => {
   return shallowMount(MapThumb, {
     propsData: { ...values },
-    localVue
+    localVue,
+    i18N
   })
 }
 
