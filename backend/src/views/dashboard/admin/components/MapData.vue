@@ -96,14 +96,17 @@ export default {
     getAPIData() {
       fetchAspirasiMap(this.listQuery).then(response => {
         this.list = response.data;
-        this.initMap(this.list);
+        const validData = this.list.filter(
+          data => data.latitude !== null && data.longitude !== null
+        );
+        this.initMap(validData);
       });
     },
     initMap(dataMap) {
       try {
         this.map = leaflet
           .map('leafletmap')
-          .setView([this.list[0].latitude, this.list[0].longitude], this.zoom);
+          .setView([dataMap[0].latitude, dataMap[0].longitude], this.zoom);
         this.tileLayer = leaflet.tileLayer(
           'https://cartodb-basemaps-{s}.global.ssl.fastly.net/rastertiles/voyager/{z}/{x}/{y}.png',
           {
