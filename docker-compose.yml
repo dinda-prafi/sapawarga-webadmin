@@ -20,7 +20,8 @@ services:
       # - ./backend/tests:/app/tests
     env_file:
       - .env
+    networks:
+      -  jds-dev-network
       
 networks:
-  internal:
-    driver: bridge
+  jds-dev-network:
