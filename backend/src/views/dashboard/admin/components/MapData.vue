@@ -54,7 +54,6 @@
 
 <script>
 import { fetchAspirasiMap } from "@/api/dashboard";
-import gmapsInit from "@/utils/gmaps";
 import { mapGetters } from "vuex";
 import L from "leaflet";
 
@@ -114,6 +113,7 @@ export default {
               '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="https://carto.com/attribution">CARTO</a>'
           }
         );
+        this.tileLayer.width = 1500;
         this.tileLayer.addTo(this.map);
         this.initMarkers(dataMap);
       } catch (error) {
@@ -122,7 +122,7 @@ export default {
       }
     },
     initMarkers(dataMap) {
-      const coordinates=[];
+      const coordinates = [];
       dataMap.forEach(feature => {
         feature.leafletObject = L.marker([feature.latitude, feature.longitude])
           .bindTooltip(`${feature.name} : ${feature.counts} Usulan`)
@@ -130,9 +130,9 @@ export default {
             this.checkLevel(feature.id);
           })
           .addTo(this.map);
-          coordinates.push([feature.latitude, feature.longitude])
+        coordinates.push([feature.latitude, feature.longitude]);
       });
-      this.map.fitBounds(coordinates)
+      this.map.fitBounds(coordinates);
     },
     checkLevel(id) {
       if (this.isChecked.kabkota) {
@@ -205,9 +205,9 @@ export default {
   height: 440px;
 }
 
-.gmap_canvas {
+#leafletmap {
   background: none !important;
-  width: 750px !important;
+  width: 100%;
   height: 400px;
   margin-left: 0px;
   border-radius: 5px;
@@ -218,28 +218,20 @@ export default {
   cursor: pointer !important;
 }
 
-#gmaps {
-  width: 700px;
-}
-
 .btn-reset {
   right: 0;
   position: absolute;
   margin-top: 15px;
 }
 
-.openSidebar {
-  width: 650px !important;
-}
-
 @media only screen and (min-width: 992px) and (max-width: 1200px) {
-  .gmap_canvas {
+  #leafletmap {
     width: 885px !important;
   }
 }
 
 @media only screen and (min-width: 768px) and (max-width: 992px) {
-  .gmap_canvas {
+  #leafletmap {
     width: 660px !important;
   }
 }

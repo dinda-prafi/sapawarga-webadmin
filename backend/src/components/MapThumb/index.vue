@@ -1,27 +1,27 @@
 <template>
-  <div id="leafletmap"></div>
+  <div id="leafletmap" />
 </template>
 
 <script>
-import L from "leaflet";
+import L from 'leaflet'
 
 export default {
-  name: "MapThumb",
+  name: 'MapThumb',
 
   props: {
     latitude: {
       type: String,
-      default: "-6.8675185",
+      default: '-6.8675185',
       required: true
     },
     longitude: {
       type: String,
-      default: "107.0446946",
+      default: '107.0446946',
       required: true
     },
     id: {
       type: String,
-      default: "gmap_canvas"
+      default: 'gmap_canvas'
     }
   },
 
@@ -29,43 +29,41 @@ export default {
     return {
       map: null,
       zoom: 12
-    };
+    }
   },
 
   mounted() {
-    this.initMap();
+    this.initMap()
   },
 
   methods: {
     initMap() {
       try {
-        this.map = L.map("leafletmap").setView(
+        this.map = L.map('leafletmap').setView(
           [this.latitude, this.longitude],
           this.zoom
-        );
+        )
         this.tileLayer = L.tileLayer(
-          "https://cartodb-basemaps-{s}.global.ssl.fastly.net/rastertiles/voyager/{z}/{x}/{y}.png",
+          'https://cartodb-basemaps-{s}.global.ssl.fastly.net/rastertiles/voyager/{z}/{x}/{y}.png',
           {
             maxZoom: 18,
             attribution:
               '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="https://carto.com/attribution">CARTO</a>'
           }
-        );
+        )
 
-        this.tileLayer.addTo(this.map);
-        this.initMarker();
+        this.tileLayer.addTo(this.map)
+        this.initMarker()
       } catch (error) {
-        console.error(error);
-        this.$message.error(this.$t("map-error"));
+        console.error(error)
+        this.$message.error(this.$t('map-error'))
       }
     },
     initMarker() {
-      const leafletObject = L.marker([this.latitude, this.longitude]).addTo(
-        this.map
-      );
+      L.marker([this.latitude, this.longitude]).addTo(this.map)
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>
