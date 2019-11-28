@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import leaflet from 'leaflet';
+import leaflet from 'leaflet'
 
 export default {
   name: 'MapThumb',
@@ -29,11 +29,11 @@ export default {
     return {
       map: null,
       zoom: 12
-    };
+    }
   },
 
   mounted() {
-    this.initMap();
+    this.initMap()
   },
 
   methods: {
@@ -41,7 +41,7 @@ export default {
       try {
         this.map = leaflet
           .map('leafletmap')
-          .setView([this.latitude, this.longitude], this.zoom);
+          .setView([this.latitude, this.longitude], this.zoom)
         this.tileLayer = leaflet.tileLayer(
           'https://cartodb-basemaps-{s}.global.ssl.fastly.net/rastertiles/voyager/{z}/{x}/{y}.png',
           {
@@ -49,18 +49,18 @@ export default {
             attribution:
               '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="https://carto.com/attribution">CARTO</a>'
           }
-        );
+        )
 
-        this.tileLayer.addTo(this.map);
-        this.initMarker();
+        this.tileLayer.addTo(this.map)
+        this.initMarker()
       } catch (error) {
         console.error(error)
         // this.$message.error(this.$t('map-error'))
       }
     },
     initMarker() {
-      leaflet.marker([this.latitude, this.longitude]).addTo(this.map);
+      leaflet.marker([this.latitude, this.longitude]).addTo(this.map)
     }
   }
-};
+}
 </script>
