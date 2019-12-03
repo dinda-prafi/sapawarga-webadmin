@@ -12,15 +12,11 @@ services:
         - VUE_APP_ERROR_ENVIRONMENT=$VUE_APP_ERROR_ENVIRONMENT
     image: registry.gitlab.com/jdsteam/sapa-warga/sapawarga-webadmin:${VERSION}
     networks:
-      - internal
+      -  jds-dev-network
     ports: 
       - 8081:80
-    # volumes:
-      # - ./backend/src:/app/src
-      # - ./backend/tests:/app/tests
     env_file:
       - .env
       
 networks:
-  internal:
-    driver: bridge
+  jds-dev-network:
