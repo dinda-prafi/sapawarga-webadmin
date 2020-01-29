@@ -78,6 +78,9 @@ export default {
       },
       listQuery: {
         search: null,
+        kabkota_id: null,
+        kec_id: null,
+        kel_id: null,
         sort_by: 'created_at',
         sort_order: 'descending',
         page: 1,
